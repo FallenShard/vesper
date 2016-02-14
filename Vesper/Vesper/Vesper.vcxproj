@@ -94,7 +94,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3dll.lib;tbb_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)ext\dll\*.*" "$(TargetDir)" /Y</Command>
@@ -120,11 +120,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3dll.lib;tbb.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)ext\dll\*.*" "$(TargetDir)" /Y</Command>
@@ -133,7 +134,9 @@
   <ItemGroup>
     <ClCompile Include="src\core\Application.cpp" />
     <ClCompile Include="src\core\Bitmap.cpp" />
+    <ClCompile Include="src\core\ImageBlock.cpp" />
     <ClCompile Include="src\core\InputMapper.cpp" />
+    <ClCompile Include="src\core\RayTracer.cpp" />
     <ClCompile Include="src\core\Renderer.cpp" />
     <ClCompile Include="src\core\TexturedQuad.cpp" />
     <ClCompile Include="src\core\TravellingSalesman.cpp" />
@@ -145,11 +148,20 @@
     <ClInclude Include="include\core\Bitmap.hpp" />
     <ClInclude Include="include\core\Delegate.hpp" />
     <ClInclude Include="include\core\EventSource.hpp" />
+    <ClInclude Include="include\core\ImageBlock.hpp" />
     <ClInclude Include="include\core\InputMapper.hpp" />
+    <ClInclude Include="include\core\RayTracer.hpp" />
     <ClInclude Include="include\core\Renderer.hpp" />
     <ClInclude Include="include\core\TexturedQuad.hpp" />
+    <ClInclude Include="include\core\Timer.hpp" />
     <ClInclude Include="include\core\TravellingSalesman.hpp" />
     <ClInclude Include="include\core\Utils.hpp" />
+    <ClInclude Include="include\math\Types.hpp" />
+    <ClInclude Include="include\sampling\Sampler.hpp" />
+    <ClInclude Include="include\spectrum\CoefficientSpectrum.hpp" />
+    <ClInclude Include="include\spectrum\RgbSpectrum.hpp" />
+    <ClInclude Include="include\spectrum\SampledSpectrum.hpp" />
+    <ClInclude Include="include\spectrum\Spectrum.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\color_frag.glsl" />

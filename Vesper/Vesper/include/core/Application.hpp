@@ -6,7 +6,8 @@
 
 #include "core/InputMapper.hpp"
 #include "core/Renderer.hpp"
-#include "core/Bitmap.hpp"
+#include "core/RayTracer.hpp"
+#include "core/ImageBlock.hpp"
 #include "core/TravellingSalesman.hpp"
 
 class Application
@@ -27,6 +28,7 @@ public:
     void run();
 
     void keyEventDebug(int key, int action, int mode);
+    void onSceneInitialized(int width, int height);
 
 private:
     GLFWwindow* m_mainWindow;
@@ -34,7 +36,8 @@ private:
     std::shared_ptr<InputMapper> m_inputMapper;
 
     std::shared_ptr<Renderer> m_renderer;
-    std::shared_ptr<Bitmap> m_bitmap;
 
     std::shared_ptr<TravellingSalesman> m_tsp;
+
+    std::unique_ptr<RayTracer> m_rayTracer;
 };

@@ -11,6 +11,10 @@
 #include "core/TexturedQuad.hpp"
 #include "core/Bitmap.hpp"
 
+#include "core/ImageBlock.hpp"
+
+#include <tbb/concurrent_queue.h>
+
 class Renderer
 {
 public:
@@ -23,8 +27,11 @@ public:
     GLuint prepareTechnique(const std::string& name, GLuint vs, GLuint fs);
     GLuint getTechnique(const std::string& name);
 
-    void onResized(int newWidth, int newHeight);
+    void resize(int newWidth, int newHeight);
+    void setImageSize(int newWidth, int newHeight);
+
     void onKeyPressed(int key, int action, int mode);
+    void onImageUpdated(ImageBlock& imageBlock, int xOffset, int yOffset);
 
 private:
     GLFWwindow* m_window;
@@ -34,4 +41,12 @@ private:
     std::shared_ptr<TexturedQuad> m_texQuad;
 
     std::shared_ptr<Bitmap> m_bitmap;
+
+    struct RayTracingUpdate
+    {
+        std::vector<float> data;
+        int w, h, x, y;
+    };
+
+    tbb::concurrent_queue<RayTracingUpdate> m_updateQueue;
 };

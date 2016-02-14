@@ -173,6 +173,7 @@ void TravellingSalesman::render()
 {
     glUseProgram(m_program);
     
+    glLineWidth(1);
     glUniform4f(m_colorUnif, 0.5f, 0.5f, 0.5f, 1.f);
     glBindVertexArray(m_edgeVao);
     glDrawArrays(GL_LINES, 0, 2 * m_numCities * (m_numCities - 1) / 2);
@@ -185,10 +186,10 @@ void TravellingSalesman::render()
     glBindVertexArray(m_vao);
     glDrawArrays(GL_POINTS, 0, 1);
 
+    glLineWidth(3);
     glUniform4f(m_colorUnif, 0.f, 1.f, 0.f, 1.f);
     glBindVertexArray(m_bestVao);
     glDrawArrays(GL_LINES, 0, 2 * (m_numCities - 1));
-
 }
 
 void TravellingSalesman::generatePopulation()

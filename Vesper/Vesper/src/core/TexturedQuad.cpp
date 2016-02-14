@@ -56,14 +56,20 @@ TexturedQuad::TexturedQuad()
 
     glGenTextures(1, &m_texId);
     glBindTexture(GL_TEXTURE_2D, m_texId);
-    setSamplerParameters();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 TexturedQuad::~TexturedQuad()
 {
     glDeleteVertexArrays(1, &m_vao);
+
     glDeleteBuffers(1, &m_vbo);
     glDeleteBuffers(1, &m_ibo);
+
+    glDeleteTextures(1, &m_texId);
 }
 
 void TexturedQuad::setTechnique(GLuint technique)
@@ -81,6 +87,13 @@ void TexturedQuad::setTexture(const unsigned char* data, int width, int height)
     glActiveTexture(GL_TEXTURE0 + 1);
     glBindTexture(GL_TEXTURE_2D, m_texId);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+}
+
+void TexturedQuad::setTextureSize(int width, int height)
+{
+    glActiveTexture(GL_TEXTURE0 + 1);
+    glBindTexture(GL_TEXTURE_2D, m_texId);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, nullptr);
 }
 
 void TexturedQuad::setHdriTexture(const float* data, int width, int height)
@@ -103,12 +116,4 @@ void TexturedQuad::render()
    
     glBindVertexArray(m_vao);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
-}
-
-void TexturedQuad::setSamplerParameters()
-{
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }

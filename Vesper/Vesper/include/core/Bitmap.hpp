@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <eigen/Dense>
+
 class Bitmap
 {
 public:
@@ -18,6 +20,8 @@ public:
     int getHeight() const;
 
 private:
+
+    //Eigen::
 
     struct Color
     {

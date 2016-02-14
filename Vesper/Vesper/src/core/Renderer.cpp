@@ -1,4 +1,5 @@
 #include <vector>
+#include <thread>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -6,35 +7,39 @@
 #include "core/Renderer.hpp"
 #include "core/Utils.hpp"
 
+#include <core/ImageBlock.hpp>
+
 Renderer::Renderer(GLFWwindow* mainWindow)
     : m_window(mainWindow)
 {
     int width, height;
     glfwGetWindowSize(m_window, &width, &height);
-    onResized(width, height);
+    resize(width, height);
 
     GLuint vs = prepareShader(GL_VERTEX_SHADER, "res/textured_vert.glsl");
     GLuint fs = prepareShader(GL_FRAGMENT_SHADER, "res/textured_frag.glsl");
     GLuint tech = prepareTechnique("textured", vs, fs);
 
+    vs = prepareShader(GL_VERTEX_SHADER, "res/color_vert.glsl");
+    fs = prepareShader(GL_FRAGMENT_SHADER, "res/color_frag.glsl");
+    tech = prepareTechnique("color", vs, fs);
+
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
     m_texQuad = std::make_shared<TexturedQuad>();
-    m_texQuad->setTechnique(tech);
+    m_texQuad->setTechnique(getTechnique("textured"));
 
     stbi_set_flip_vertically_on_load(1);
     int imWidth, imHeight, comps;
     unsigned char* data = stbi_load("res/kitten.jpeg", &imWidth, &imHeight, &comps, STBI_rgb);
 
     m_texQuad->setTexture(data, imWidth, imHeight);
-    m_bitmap = std::make_shared<Bitmap>(800, 600);
+    m_bitmap = std::make_shared<Bitmap>(1, 1);
 
     stbi_image_free(data);
 
-    vs = prepareShader(GL_VERTEX_SHADER, "res/color_vert.glsl");
-    fs = prepareShader(GL_FRAGMENT_SHADER, "res/color_frag.glsl");
-    tech = prepareTechnique("color", vs, fs);
+    
 }
 
 Renderer::~Renderer()
@@ -45,6 +50,15 @@ Renderer::~Renderer()
 
 void Renderer::render()
 {
+    while (!m_updateQueue.empty())
+    {
+        RayTracingUpdate result;
+        if (m_updateQueue.try_pop(result))
+        {
+            m_texQuad->updateHdriTexture(result.data.data(), result.x, result.y, result.w, result.h);
+        }
+    }
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     m_texQuad->render();
@@ -124,41 +138,30 @@ GLuint Renderer::getTechnique(const std::string & name)
     return m_techniques[name];
 }
 
-void Renderer::onResized(int newWidth, int newHeight)
+void Renderer::resize(int newWidth, int newHeight)
 {
     glViewport(0, 0, newWidth, newHeight);
 }
 
 void Renderer::onKeyPressed(int key, int action, int mode)
 {
-    switch (key)
-    {
-    case GLFW_KEY_A:
-    {
-        if (action == GLFW_PRESS)
-            m_texQuad->setHdriTexture(m_bitmap->getRawPixels(), m_bitmap->getWidth(), m_bitmap->getHeight());
+}
 
-        break;
-    }
-    case GLFW_KEY_S:
-    {
-        if (action == GLFW_PRESS)
-        {
-            m_bitmap->updateBlock(0, 0, 50, 50, 1.f, 1.0f, 0.f);
-            m_texQuad->updateHdriTexture(m_bitmap->getRawPixelBlock(0, 0, 50, 50).data(), 0, 0, 50, 50);
-        }
-        break;
-    }
-    case GLFW_KEY_D:
-    {
-        if (action == GLFW_PRESS)
-        {
-            m_bitmap->updateBlock(128, 64, 64, 64, 0.f, 1.0f, 1.f);
-            m_texQuad->updateHdriTexture(m_bitmap->getRawPixelBlock(128, 64, 64, 64).data(), 128, 64, 64, 64);
-        }
-        break;
-    }
-    }
+void Renderer::setImageSize(int newWidth, int newHeight)
+{
+    resize(newWidth, newHeight);
+    m_texQuad->setTextureSize(newWidth, newHeight);
+}
+
+void Renderer::onImageUpdated(ImageBlock& imageBlock, int xOffset, int yOffset)
+{
+    int width = imageBlock.getSize().x();
+    int height = imageBlock.getSize().y();
+
+    m_updateQueue.push(RayTracingUpdate{ imageBlock.getRaw(), width, height, xOffset, yOffset });
+
+    // Wake up the main thread so that it goes through a render cycle
+    glfwPostEmptyEvent();
 }
 
 
