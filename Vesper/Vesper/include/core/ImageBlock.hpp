@@ -6,26 +6,29 @@
 
 #include <spectrum/Spectrum.hpp>
 
-class ImageBlock
+namespace vesp
 {
-public:
-    ImageBlock(const Vector2i& size);
-
-    ~ImageBlock();
-
-    void initialize(const Vector2i& size);
-    void clear() {};
-
-    Vector2i getSize() const;
-
-    Spectrum& operator()(int row, int col)
+    class ImageBlock
     {
-        return m_pixels.coeffRef(row, col);
-    }
+    public:
+        ImageBlock(const Vector2i& size);
 
-    std::vector<float> getRaw();
-    
+        ~ImageBlock();
 
-private:
-    Eigen::Array<Spectrum, Eigen::Dynamic, Eigen::Dynamic> m_pixels;
-};
+        void initialize(const Vector2i& size);
+        void clear() {};
+
+        Vector2i getSize() const;
+
+        Spectrum& operator()(int row, int col)
+        {
+            return m_pixels.coeffRef(row, col);
+        }
+
+        std::vector<float> getRaw();
+
+
+    private:
+        Eigen::Array<Spectrum, Eigen::Dynamic, Eigen::Dynamic> m_pixels;
+    };
+}

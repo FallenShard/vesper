@@ -2,15 +2,18 @@
 
 #include <eigen/Dense>
 
-template <int numSamples>
-class CoefficientSpectrum : public Eigen::Array<float, numSamples, 1>
+namespace vesp
 {
-public:
-    CoefficientSpectrum(float value)
-        : Base(value)
+    template <int numSamples>
+    class CoefficientSpectrum : public Eigen::Array<float, numSamples, 1>
     {
-    }
+    public:
+        CoefficientSpectrum(float value)
+            : Base(value)
+        {
+        }
 
-private:
-    using Base = Eigen::Array<float, numSamples, 1>;
-};
+    private:
+        using Base = Eigen::Array<float, numSamples, 1>;
+    };
+}

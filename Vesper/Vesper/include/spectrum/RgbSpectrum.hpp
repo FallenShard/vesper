@@ -1,17 +1,20 @@
 #pragma once
 
-struct RgbSpectrum
+namespace vesp
 {
-    float r, g, b;
-
-    RgbSpectrum()
+    struct RgbSpectrum
     {
+        float r, g, b;
 
-    }
+        RgbSpectrum()
+        {
 
-    RgbSpectrum(float rr, float gg, float bb)
-        : r(rr), g(gg), b(bb)
-    {
+        }
 
-    }
-};
+        RgbSpectrum(float rr, float gg, float bb)
+            : r(rr), g(gg), b(bb)
+        {
+
+        }
+    };
+}

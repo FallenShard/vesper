@@ -10,34 +10,37 @@
 #include "core/ImageBlock.hpp"
 #include "core/TravellingSalesman.hpp"
 
-class Application
+namespace vesp
 {
-public:
-    enum class Status
+    class Application
     {
-        OK,
-        Failure
+    public:
+        enum class Status
+        {
+            OK,
+            Failure
+        };
+
+        Application();
+        ~Application();
+
+        Status initializeDependencies();
+        Status initializeComponents();
+
+        void run();
+
+        void keyEventDebug(int key, int action, int mode);
+        void onSceneInitialized(int width, int height);
+
+    private:
+        GLFWwindow* m_mainWindow;
+
+        std::shared_ptr<InputMapper> m_inputMapper;
+
+        std::shared_ptr<Renderer> m_renderer;
+
+        std::shared_ptr<TravellingSalesman> m_tsp;
+
+        std::unique_ptr<RayTracer> m_rayTracer;
     };
-
-    Application();
-    ~Application();
-
-    Status initializeDependencies();
-    Status initializeComponents();
-
-    void run();
-
-    void keyEventDebug(int key, int action, int mode);
-    void onSceneInitialized(int width, int height);
-
-private:
-    GLFWwindow* m_mainWindow;
-
-    std::shared_ptr<InputMapper> m_inputMapper;
-
-    std::shared_ptr<Renderer> m_renderer;
-
-    std::shared_ptr<TravellingSalesman> m_tsp;
-
-    std::unique_ptr<RayTracer> m_rayTracer;
-};
+}

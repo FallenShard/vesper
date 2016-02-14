@@ -2,4 +2,7 @@
 
 #include <spectrum/RgbSpectrum.hpp>
 
-using Spectrum = RgbSpectrum;
+namespace vesp
+{
+    using Spectrum = RgbSpectrum;
+}

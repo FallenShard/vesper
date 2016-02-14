@@ -2,4 +2,7 @@
 
 #include <eigen/Core>
 
-using Vector2i = Eigen::Vector2i;
+namespace vesp
+{
+    using Vector2i = Eigen::Vector2i;
+}

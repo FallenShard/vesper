@@ -4,26 +4,29 @@
 #include <iostream>
 #include <fstream>
 
-class Utils
+namespace vesp
 {
-public:
-    static std::string fileToString(const std::string& fileName)
+    class Utils
     {
-        std::ifstream inputFile(fileName);
-        std::string source;
-
-        if (inputFile.is_open())
+    public:
+        static std::string fileToString(const std::string& fileName)
         {
-            std::string line;
-            while (std::getline(inputFile, line))
-            {
-                source += line + '\n';
-            }
-            inputFile.close();
-        }
-        else
-            std::cout << "Could not open file " << fileName << std::endl;
+            std::ifstream inputFile(fileName);
+            std::string source;
 
-        return source;
-    }
-};
+            if (inputFile.is_open())
+            {
+                std::string line;
+                while (std::getline(inputFile, line))
+                {
+                    source += line + '\n';
+                }
+                inputFile.close();
+            }
+            else
+                std::cout << "Could not open file " << fileName << std::endl;
+
+            return source;
+        }
+    };
+}
