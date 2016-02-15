@@ -8,13 +8,20 @@ namespace vesp
 
         RgbSpectrum()
         {
-
         }
 
-        RgbSpectrum(float rr, float gg, float bb)
-            : r(rr), g(gg), b(bb)
+        RgbSpectrum(float value)
+            : r(value)
+            , g(value)
+            , b(value)
         {
+        }
 
+        RgbSpectrum(float red, float green, float blue)
+            : r(red)
+            , g(green)
+            , b(blue)
+        {
         }
     };
 }

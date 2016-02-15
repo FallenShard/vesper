@@ -94,7 +94,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3dll.lib;tbb_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3dll.lib;embree.lib;tbb_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)ext\dll\*.*" "$(TargetDir)" /Y</Command>
@@ -125,39 +125,66 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw3dll.lib;tbb.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3dll.lib;embree.lib;tbb.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)ext\dll\*.*" "$(TargetDir)" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\acceleration\EmbreeWrapper.cpp" />
+    <ClCompile Include="src\cameras\Camera.cpp" />
+    <ClCompile Include="src\cameras\Perspective.cpp" />
     <ClCompile Include="src\core\Application.cpp" />
     <ClCompile Include="src\core\Bitmap.cpp" />
     <ClCompile Include="src\core\ImageBlock.cpp" />
     <ClCompile Include="src\core\InputMapper.cpp" />
+    <ClCompile Include="src\core\FileParser.cpp" />
     <ClCompile Include="src\core\RayTracer.cpp" />
     <ClCompile Include="src\core\Renderer.cpp" />
+    <ClCompile Include="src\core\Scene.cpp" />
     <ClCompile Include="src\core\TexturedQuad.cpp" />
     <ClCompile Include="src\core\TravellingSalesman.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\sampling\Independent.cpp" />
+    <ClCompile Include="src\sampling\Sampler.cpp" />
+    <ClCompile Include="src\shapes\TriangleMesh.cpp" />
+    <ClCompile Include="src\shapes\WavefrontObjMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\acceleration\EmbreeWrapper.hpp" />
+    <ClInclude Include="include\acceleration\GeometryVisitor.hpp" />
+    <ClInclude Include="include\cameras\Camera.hpp" />
+    <ClInclude Include="include\cameras\Perspective.hpp" />
     <ClInclude Include="include\core\Application.hpp" />
     <ClInclude Include="include\core\Bitmap.hpp" />
     <ClInclude Include="include\core\Delegate.hpp" />
     <ClInclude Include="include\core\EventSource.hpp" />
     <ClInclude Include="include\core\ImageBlock.hpp" />
     <ClInclude Include="include\core\InputMapper.hpp" />
+    <ClInclude Include="include\core\FileParser.hpp" />
     <ClInclude Include="include\core\RayTracer.hpp" />
     <ClInclude Include="include\core\Renderer.hpp" />
+    <ClInclude Include="include\core\Scene.hpp" />
     <ClInclude Include="include\core\TexturedQuad.hpp" />
     <ClInclude Include="include\core\Timer.hpp" />
     <ClInclude Include="include\core\TravellingSalesman.hpp" />
     <ClInclude Include="include\core\Utils.hpp" />
+    <ClInclude Include="include\integrators\Integrator.hpp" />
+    <ClInclude Include="include\math\Frame.hpp" />
+    <ClInclude Include="include\math\Normal.hpp" />
+    <ClInclude Include="include\math\Operations.hpp" />
+    <ClInclude Include="include\math\Point.hpp" />
+    <ClInclude Include="include\math\Ray.hpp" />
+    <ClInclude Include="include\math\Transform.hpp" />
     <ClInclude Include="include\math\Types.hpp" />
+    <ClInclude Include="include\math\Vector.hpp" />
+    <ClInclude Include="include\sampling\Independent.hpp" />
     <ClInclude Include="include\sampling\Sampler.hpp" />
+    <ClInclude Include="include\shapes\Shape.hpp" />
+    <ClInclude Include="include\shapes\TriangleMesh.hpp" />
+    <ClInclude Include="include\shapes\WavefrontObjMesh.hpp" />
     <ClInclude Include="include\spectrum\CoefficientSpectrum.hpp" />
     <ClInclude Include="include\spectrum\RgbSpectrum.hpp" />
     <ClInclude Include="include\spectrum\SampledSpectrum.hpp" />

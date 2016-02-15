@@ -18,9 +18,20 @@ namespace vesp
         m_pixels.resize(size.y(), size.x());
     }
 
+    void ImageBlock::clear()
+    {
+        for (int i = 0; i < m_pixels.rows(); i++)
+        {
+            for (int j = 0; j < m_pixels.cols(); j++)
+            {
+                m_pixels.coeffRef(i, j) = Spectrum(0.f);
+            }
+        }
+    }
+
     Vector2i ImageBlock::getSize() const
     {
-        return Vector2i(m_pixels.cols(), m_pixels.rows());
+        return Vector2i(static_cast<int>(m_pixels.cols()), static_cast<int>(m_pixels.rows()));
     }
 
     std::vector<float> ImageBlock::getRaw()

@@ -12,8 +12,12 @@
 #include <core/EventSource.hpp>
 #include <core/Renderer.hpp>
 
+#include <core/Scene.hpp>
+
 namespace vesp
 {
+    class Sampler;
+
     class RayTracer
     {
     public:
@@ -29,6 +33,8 @@ namespace vesp
         EventSource<void, ImageBlock&, int, int> imageUpdated;
 
     private:
+        Scene* m_scene;
+
         struct ImageBlockDescriptor
         {
             int x, y, w, h;
@@ -37,7 +43,7 @@ namespace vesp
         };
 
         void generateImageBlocks(int width, int height);
-        void renderBlock(ImageBlock& block, ImageBlockDescriptor& blockDesc);
+        void renderBlock(ImageBlock& block, ImageBlockDescriptor& blockDesc, Sampler& sampler, const Scene* scene);
 
         ImageBlock m_image;
 

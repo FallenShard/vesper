@@ -16,7 +16,7 @@ namespace vesp
         ~ImageBlock();
 
         void initialize(const Vector2i& size);
-        void clear() {};
+        void clear();
 
         Vector2i getSize() const;
 

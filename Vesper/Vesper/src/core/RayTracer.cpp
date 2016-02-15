@@ -2,18 +2,22 @@
 #include <tbb/concurrent_vector.h>
 #include <tbb/parallel_for.h>
 #include <tbb/task_scheduler_init.h>
-#include <random>
-
-#include "core/RayTracer.hpp"
-#include "core/Timer.hpp"
+#include <xmmintrin.h>
+#include <pmmintrin.h>
 
 #include <iostream>
 #include <mutex>
 
+#include "core/RayTracer.hpp"
+#include "core/Timer.hpp"
+
+#include <sampling/Sampler.hpp>
+#include <sampling/Independent.hpp>
+
 namespace
 {
-    const int DefaultImageWidth = 600;
-    const int DefaultImageHeight = 400;
+    const int DefaultImageWidth = 512;
+    const int DefaultImageHeight = 512;
     const int BlockSize = 50;
 }
 
@@ -23,13 +27,19 @@ namespace vesp
         : m_image(Vector2i(DefaultImageWidth, DefaultImageHeight))
         , m_renderStatus(RenderStatus::Done)
         , m_progress(1.f)
+        , m_scene(nullptr)
     {
+        // Recommended for embree before thread creation
+        _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+        _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
     }
 
     RayTracer::~RayTracer()
     {
         // stop rendering
         //if (m_render)
+
+        delete m_scene;
     }
 
     void RayTracer::initializeScene(const std::string& filename)
@@ -43,6 +53,8 @@ namespace vesp
         m_image.clear();
 
         // determine output etc.
+
+        m_scene = new Scene(width, height);
 
         sceneInitialized(width, height);
     }
@@ -59,8 +71,19 @@ namespace vesp
             generateImageBlocks(width, height);
 
             int numBlocks = static_cast<int>(m_blockQueue.unsafe_size());
+            int numRows = (height - 1) / BlockSize + 1;
+            int numCols = (width - 1) / BlockSize + 1;
 
             std::cout << "Using " << tbb::task_scheduler_init::default_num_threads() << " threads." << std::endl;
+
+            tbb::concurrent_vector<std::unique_ptr<Sampler>> samplers(numBlocks);
+
+#ifdef _DEBUG
+            tbb::task_scheduler_init init(1);
+#endif
+
+            for (auto& it : samplers)
+                it = std::make_unique<IndependentSampler>();
 
             auto renderImageBlocks = [&](const tbb::blocked_range<int>& range)
             {
@@ -72,7 +95,10 @@ namespace vesp
                     if (m_blockQueue.try_pop(currIbd))
                     {
                         ImageBlock currentBlock(Vector2i(currIbd.w, currIbd.h));
-                        renderBlock(currentBlock, currIbd);
+
+                        int blockId = (currIbd.y / BlockSize) * numCols + currIbd.x / BlockSize;
+
+                        renderBlock(currentBlock, currIbd, *samplers.at(blockId).get(), m_scene);
 
                         updateImage(currentBlock, currIbd.x, currIbd.y);
                     }
@@ -119,23 +145,54 @@ namespace vesp
         }
     }
 
-    void RayTracer::renderBlock(ImageBlock& block, RayTracer::ImageBlockDescriptor& blockDesc)
+    void RayTracer::renderBlock(ImageBlock& block, RayTracer::ImageBlockDescriptor& blockDesc, Sampler& sampler, const Scene* scene)
     {
-        std::default_random_engine eng(std::random_device{}());
-        std::uniform_real_distribution<float> distrib(0, 1);
-        std::uniform_int_distribution<int> distribi(1, 5);
+        //std::default_random_engine eng(std::random_device{}());
+        //std::uniform_real_distribution<float> distrib(0, 1);
+        //std::uniform_int_distribution<int> distribi(1, 5);
 
-        float sum = 0.f;
-        for (int i = 0; i < 1000'000; i++)
-            sum += distrib(eng);
+        //float sum = 0.f;
+        //for (int i = 0; i < 1000'000; i++)
+        //    sum += distrib(eng);
 
-        Spectrum spec(distrib(eng), distrib(eng), distrib(eng));
+        // getCamera
+        // getIntegrator
 
-        for (int i = 0; i < block.getSize().y(); i++)
+        const Camera* camera = scene->getCamera();
+
+        std::vector<Spectrum> colors;
+        colors.push_back({ 1.f, 1.f, 0.f });
+        colors.push_back({ 0.f, 0.f, 1.f });
+        colors.push_back({ 1.f, 0.f, 1.f });
+        colors.push_back({ 0.f, 1.f, 0.f });
+        
+
+        block.clear();
+
+        Point2i offset(blockDesc.x, blockDesc.y);
+
+        for (int y = 0; y < block.getSize().y(); ++y)
         {
-            for (int j = 0; j < block.getSize().x(); j++)
+            for (int x = 0; x < block.getSize().x(); ++x)
             {
-                block(i, j) = spec;
+                float px = x + blockDesc.x + sampler.next1D();
+                float py = y + blockDesc.y + sampler.next1D();
+
+                Point2f apertureSample = sampler.next2D();
+
+                Ray3f ray;
+
+                Spectrum response = camera->sampleRay(ray, Point2f(px, py), apertureSample);
+
+                Intersection its;
+                if (scene->rayIntersect(ray, its))
+                {
+                    block(y, x) = colors[2 * its.geomId + its.triId % 2];
+                }
+                else
+                    block(y, x) = Spectrum(px / DefaultImageWidth, py / DefaultImageHeight, 1.f);
+
+                //std::cout << "Pixel: " << px << " : " << py << std::endl;
             }
         }
     }
