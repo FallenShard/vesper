@@ -247,7 +247,6 @@ namespace vesp
             }
 
             // Call the configure callback (all children are initialized) and return
-            vespObject->setClassType(classTypes[node->name()]);
             vespObject->configure();
             return vespObject;
         };

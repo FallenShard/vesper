@@ -41,10 +41,9 @@ namespace vesp
         virtual void configure();
         virtual void setParent(std::weak_ptr<VesperObject> parent);
 
-        void setClassType(ClassType classType);
-        ClassType getClassType() const;
+        virtual ClassType getClassType() const = 0;
 
     private:
-        ClassType m_classType;
+        //ClassType m_classType;
     };
 }

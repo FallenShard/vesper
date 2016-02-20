@@ -21,6 +21,8 @@ namespace vesp
 
         virtual size_t getSampleCount() const;
 
+        virtual ClassType getClassType() const override { return ClassType::Sampler; }
+
     protected:
         size_t m_sampleCount;
 

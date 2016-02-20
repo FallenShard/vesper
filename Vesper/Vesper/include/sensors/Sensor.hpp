@@ -14,6 +14,8 @@ namespace vesp
 
         const Vector2i& getImageSize() const;
 
+        virtual ClassType getClassType() const override { return ClassType::Sensor; }
+
     protected:
         Vector2i m_imageSize;
 

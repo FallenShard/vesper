@@ -23,6 +23,8 @@ namespace vesp
 
         const BSDF* getBSDF() const;
 
+        virtual ClassType getClassType() const override { return ClassType::Shape; }
+
     private:
         std::shared_ptr<BSDF> m_bsdf;
     };

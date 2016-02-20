@@ -17,14 +17,4 @@ namespace vesp
     void VesperObject::setParent(std::weak_ptr<VesperObject> parent)
     {
     }
-
-    void VesperObject::setClassType(VesperObject::ClassType classType)
-    {
-        m_classType = classType;
-    }
-
-    VesperObject::ClassType VesperObject::getClassType() const
-    {
-        return m_classType;
-    }
 }

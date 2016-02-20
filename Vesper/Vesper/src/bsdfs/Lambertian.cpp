@@ -29,4 +29,9 @@ namespace vesp
     {
         return InvPI /* * subtension cosine*/;
     }
+
+    unsigned int LambertianBSDF::getType() const
+    {
+        return BSDFType::Diffuse;
+    }
 }
