@@ -1,6 +1,6 @@
 #include <iostream>
-
-#include "core/Application.hpp"
+//#include <Windows.h>
+#include <core/Application.hpp>
 
 namespace
 {
@@ -74,6 +74,7 @@ namespace vesp
 
         // Connect a few events and handlers
         m_inputMapper->keyPressed.subscribe<Application, &Application::keyEventDebug>(this);
+        m_inputMapper->filesDropped.subscribe<Application, &Application::onFilesDropped>(this);
         m_inputMapper->keyPressed.subscribe<Renderer, &Renderer::onKeyPressed>(m_renderer.get());
 
         m_rayTracer->sceneInitialized.subscribe<Application, &Application::onSceneInitialized>(this);
@@ -117,20 +118,18 @@ namespace vesp
         }*/
 
         if (key == GLFW_KEY_S)
-        {
             m_rayTracer->stopRayTracing();
-        }
-
-        if (key == GLFW_KEY_C)
-        {
-            m_rayTracer->initializeScene("res/example.xml");
-            m_rayTracer->startRayTracing();
-        }
     }
 
     void Application::onSceneInitialized(int width, int height)
     {
         glfwSetWindowSize(m_mainWindow, width, height);
         m_renderer->setImageSize(width, height);
+    }
+
+    void Application::onFilesDropped(std::vector<std::string> filenames)
+    {
+        m_rayTracer->initializeScene(filenames[0]);
+        m_rayTracer->startRayTracing();
     }
 }

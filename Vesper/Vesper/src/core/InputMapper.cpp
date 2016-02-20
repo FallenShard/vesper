@@ -11,6 +11,7 @@ namespace vesp
         glfwSetWindowSizeCallback(m_window, InputMapper::resizeEventHandlerCallback);
         glfwSetCursorPosCallback(m_window, InputMapper::mouseMoveEventHandlerCallback);
         glfwSetMouseButtonCallback(m_window, InputMapper::mouseButtonClickEventHandlerCallback);
+        glfwSetDropCallback(m_window, InputMapper::fileDropEventHandlerCallback);
     }
 
     InputMapper::~InputMapper()
@@ -44,5 +45,16 @@ namespace vesp
         double xPos, yPos;
         glfwGetCursorPos(window, &xPos, &yPos);
         if (inputMapper) inputMapper->mouseClicked(button, action, mods, xPos, yPos);
+    }
+
+    void InputMapper::fileDropEventHandlerCallback(GLFWwindow* window, int numFiles, const char** fileNames)
+    {
+        auto inputMapper = reinterpret_cast<InputMapper*>(glfwGetWindowUserPointer(window));
+        std::vector<std::string> filenames;
+        for (int i = 0; i < numFiles; i++)
+        {
+            filenames.push_back(fileNames[i]);
+        }
+        if (inputMapper) inputMapper->filesDropped(filenames);
     }
 }

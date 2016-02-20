@@ -2,6 +2,8 @@
 
 #include <set>
 #include <memory>
+#include <vector>
+#include <string>
 
 #include <GLFW/glfw3.h>
 
@@ -26,6 +28,9 @@ namespace vesp
 
         static void mouseButtonClickEventHandlerCallback(GLFWwindow* window, int button, int action, int mods);
         EventSource<void, int, int, int, double, double> mouseClicked;
+
+        static void fileDropEventHandlerCallback(GLFWwindow* window, int numFiles, const char** fileNames);
+        EventSource<void, std::vector<std::string>> filesDropped;
 
     private:
         GLFWwindow* m_window;

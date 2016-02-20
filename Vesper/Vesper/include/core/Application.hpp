@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -33,6 +34,7 @@ namespace vesp
 
         void keyEventDebug(int key, int action, int mode);
         void onSceneInitialized(int width, int height);
+        void onFilesDropped(std::vector<std::string> filenames);
 
     private:
         GLFWwindow* m_mainWindow;
