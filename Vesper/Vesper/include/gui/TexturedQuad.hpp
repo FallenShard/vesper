@@ -24,6 +24,5 @@ namespace vesp
         GLuint m_texId;
 
         GLuint m_technique;
-
     };
 }

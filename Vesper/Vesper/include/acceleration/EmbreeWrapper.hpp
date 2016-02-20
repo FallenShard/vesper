@@ -4,7 +4,6 @@
 #include <embree2/rtcore_ray.h>
 
 #include <math/Types.hpp>
-
 #include <acceleration/GeometryVisitor.hpp>
 
 namespace vesp
@@ -16,8 +15,13 @@ namespace vesp
     public:
         struct HitInfo
         {
+            float tHit;
+            Normal3f geoN;
+            float u;
+            float v;
             unsigned int geomId;
             unsigned int primId;
+            unsigned int instId;
         };
 
         EmbreeWrapper();
@@ -26,9 +30,9 @@ namespace vesp
         void buildAccelStructure();
 
         bool rayIntersect(const Ray3f& ray, HitInfo& hitInfo) const;
+        bool rayIntersect(const Ray3f& shadowRay) const;
 
         virtual unsigned int addTriangleMesh(TriangleMesh* mesh) override;
-
 
     private:
         struct Vertex
@@ -43,7 +47,5 @@ namespace vesp
 
         RTCDevice m_device;
         RTCScene m_scene;
-
-        RTCRay m_currentRay; // Avoid constant re-allocation of the ray
     };
 }

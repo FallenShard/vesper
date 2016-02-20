@@ -30,15 +30,6 @@
     <ClCompile Include="src\core\Bitmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\TexturedQuad.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\TravellingSalesman.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\ImageBlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,16 +42,7 @@
     <ClCompile Include="src\sampling\Sampler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\cameras\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\cameras\Perspective.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\FileParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\shapes\WavefrontObjMesh.cpp">
@@ -70,6 +52,48 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\shapes\TriangleMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\integrators\Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\AttributeList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\VesperObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\VesperObjectFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\FileParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\VesperException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bsdfs\Lambertian.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\Operations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shapes\Shape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sensors\Perspective.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sensors\Sensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\genetic\TravellingSalesman.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\TexturedQuad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,16 +113,7 @@
     <ClInclude Include="include\core\Bitmap.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\core\TexturedQuad.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\core\Renderer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\core\Utils.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\core\TravellingSalesman.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\core\ImageBlock.hpp">
@@ -152,22 +167,13 @@
     <ClInclude Include="include\math\Operations.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\cameras\Camera.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\math\Ray.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\cameras\Perspective.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\math\Transform.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\integrators\Integrator.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\core\FileParser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\shapes\TriangleMesh.hpp">
@@ -182,9 +188,60 @@
     <ClInclude Include="include\acceleration\GeometryVisitor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\math\RayDifferential.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math\BoundingBox.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\integrators\Test.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\shapes\Intersection.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\AttributeList.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\Renderer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\TexturedQuad.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\genetic\TravellingSalesman.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\VesperObject.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sensors\Perspective.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sensors\Sensor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\VesperObjectFactory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\io\FileParser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bsdfs\BSDF.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\VesperException.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bsdfs\Lambertian.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\color_vert.glsl" />
     <None Include="res\color_frag.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="res\example.xml" />
   </ItemGroup>
 </Project>

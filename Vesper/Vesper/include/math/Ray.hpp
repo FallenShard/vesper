@@ -16,10 +16,12 @@ namespace vesp
         DirType dInv;
         Scalar minT;
         Scalar maxT;
+        float time;
 
         Ray()
             : minT(RayEpsilon)
             , maxT(std::numeric_limits<Scalar>::infinity())
+            , time(0.f)
         {
         }
 
@@ -28,6 +30,7 @@ namespace vesp
             , d(dir)
             , minT(RayEpsilon)
             , maxT(std::numeric_limits<Scalar>::infinity())
+            , time(0.f)
         {
             update();
         }
@@ -37,6 +40,17 @@ namespace vesp
             , d(dir)
             , minT(minT)
             , maxT(maxT)
+            , time(0.f)
+        {
+            update();
+        }
+
+        Ray(const PointType& origin, const DirType& dir, Scalar minT, Scalar maxT, float time)
+            : o(origin)
+            , d(dir)
+            , minT(minT)
+            , maxT(maxT)
+            , time(time)
         {
             update();
         }
@@ -47,6 +61,7 @@ namespace vesp
             , dInv(ray.dInv)
             , minT(ray.minT)
             , maxT(ray.maxT)
+            , time(ray.time)
         {
         }
 
@@ -54,6 +69,7 @@ namespace vesp
             : o(ray.o)
             , d(ray.d)
             , dInv(ray.dInv)
+            , time(ray.time)
             , minT(minT)
             , maxT(maxT)
         {
@@ -77,6 +93,7 @@ namespace vesp
             result.dInv = -d;
             result.minT = minT;
             result.maxT = maxT;
+            result.time = time;
             return result;
         }
     };

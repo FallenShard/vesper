@@ -91,8 +91,7 @@ namespace vesp
     {
         glClearColor(0.0f, 0.3f, 0.0f, 1.0f);
 
-        m_rayTracer->initializeScene("");
-
+        m_rayTracer->initializeScene("res/example.xml");
         m_rayTracer->startRayTracing();
 
         while (!glfwWindowShouldClose(m_mainWindow))
@@ -116,6 +115,17 @@ namespace vesp
         for (int i = 0; i < 500; i++)
         m_tsp->simulate(0);
         }*/
+
+        if (key == GLFW_KEY_S)
+        {
+            m_rayTracer->stopRayTracing();
+        }
+
+        if (key == GLFW_KEY_C)
+        {
+            m_rayTracer->initializeScene("res/example.xml");
+            m_rayTracer->startRayTracing();
+        }
     }
 
     void Application::onSceneInitialized(int width, int height)

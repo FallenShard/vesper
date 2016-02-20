@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <string>
 #include <thread>
 #include <atomic>
@@ -10,13 +9,11 @@
 
 #include <core/ImageBlock.hpp>
 #include <core/EventSource.hpp>
-#include <core/Renderer.hpp>
-
-#include <core/Scene.hpp>
 
 namespace vesp
 {
     class Sampler;
+    class Scene;
 
     class RayTracer
     {
@@ -29,12 +26,12 @@ namespace vesp
 
         void updateImage(ImageBlock& imageBlock, int xOffset, int yOffset);
 
+        void stopRayTracing();
+
         EventSource<void, int, int> sceneInitialized;
         EventSource<void, ImageBlock&, int, int> imageUpdated;
 
     private:
-        Scene* m_scene;
-
         struct ImageBlockDescriptor
         {
             int x, y, w, h;
@@ -45,14 +42,17 @@ namespace vesp
         void generateImageBlocks(int width, int height);
         void renderBlock(ImageBlock& block, ImageBlockDescriptor& blockDesc, Sampler& sampler, const Scene* scene);
 
+        std::shared_ptr<Scene> m_scene;
         ImageBlock m_image;
 
         tbb::concurrent_queue<ImageBlockDescriptor> m_blockQueue;
 
         enum class RenderStatus
         {
-            Done,
-            Busy
+            Free,
+            Busy,
+            Interrupted,
+            Done
         };
 
         std::thread m_renderThread;

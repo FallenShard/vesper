@@ -1,23 +1,27 @@
+#include <iostream>
+#include <xmmintrin.h>
+#include <pmmintrin.h>
+
 #include <tbb/blocked_range.h>
 #include <tbb/concurrent_vector.h>
 #include <tbb/parallel_for.h>
 #include <tbb/task_scheduler_init.h>
-#include <xmmintrin.h>
-#include <pmmintrin.h>
 
-#include <iostream>
-#include <mutex>
-
-#include "core/RayTracer.hpp"
-#include "core/Timer.hpp"
+#include <core/RayTracer.hpp>
+#include <core/Scene.hpp>
+#include <core/Timer.hpp>
+#include <core/VesperException.hpp>
 
 #include <sampling/Sampler.hpp>
-#include <sampling/Independent.hpp>
+#include <sensors/Sensor.hpp>
+#include <integrators/Integrator.hpp>
+
+#include <io/FileParser.hpp>
 
 namespace
 {
-    const int DefaultImageWidth = 512;
-    const int DefaultImageHeight = 512;
+    const int DefaultImageWidth = 800;
+    const int DefaultImageHeight = 600;
     const int BlockSize = 50;
 }
 
@@ -25,7 +29,7 @@ namespace vesp
 {
     RayTracer::RayTracer()
         : m_image(Vector2i(DefaultImageWidth, DefaultImageHeight))
-        , m_renderStatus(RenderStatus::Done)
+        , m_renderStatus(RenderStatus::Free)
         , m_progress(1.f)
         , m_scene(nullptr)
     {
@@ -36,31 +40,37 @@ namespace vesp
 
     RayTracer::~RayTracer()
     {
-        // stop rendering
-        //if (m_render)
-
-        delete m_scene;
+        stopRayTracing();
     }
 
     void RayTracer::initializeScene(const std::string& filename)
     {
-        // load scene from the file, etc.
+        if (m_renderStatus == RenderStatus::Busy)
+            return;
 
-        int width = DefaultImageWidth;
-        int height = DefaultImageHeight;
+        try
+        {
+            FileParser parser;
+            m_scene = parser.loadFromXml(filename);
 
-        m_image.initialize(Vector2i(width, height));
-        m_image.clear();
+            auto imageSize = m_scene->getSensor()->getImageSize();
+            sceneInitialized(imageSize.x(), imageSize.y());
 
-        // determine output etc.
-
-        m_scene = new Scene(width, height);
-
-        sceneInitialized(width, height);
+            m_image.initialize(imageSize);
+            m_image.clear();
+        }
+        catch (VesperException ex)
+        {
+            std::cerr << ex << std::endl;
+            m_scene = nullptr;
+        }
     }
 
     void RayTracer::startRayTracing()
     {
+        if (!m_scene || m_renderStatus == RenderStatus::Busy)
+            return;
+
         m_renderStatus = RenderStatus::Busy;
         m_renderThread = std::thread([this]
         {
@@ -83,14 +93,16 @@ namespace vesp
 #endif
 
             for (auto& it : samplers)
-                it = std::make_unique<IndependentSampler>();
+                it = m_scene->getSampler()->clone();
 
             auto renderImageBlocks = [&](const tbb::blocked_range<int>& range)
             {
-
                 for (int i = range.begin(); i < range.end(); ++i)
                 {
-                    RayTracer::ImageBlockDescriptor currIbd(0, 0, 0, 0);
+                    if (m_renderStatus == RenderStatus::Interrupted)
+                        break;
+
+                    RayTracer::ImageBlockDescriptor currIbd;
 
                     if (m_blockQueue.try_pop(currIbd))
                     {
@@ -98,7 +110,7 @@ namespace vesp
 
                         int blockId = (currIbd.y / BlockSize) * numCols + currIbd.x / BlockSize;
 
-                        renderBlock(currentBlock, currIbd, *samplers.at(blockId).get(), m_scene);
+                        renderBlock(currentBlock, currIbd, *samplers.at(blockId).get(), m_scene.get());
 
                         updateImage(currentBlock, currIbd.x, currIbd.y);
                     }
@@ -109,14 +121,19 @@ namespace vesp
 
             NanoTimer timer;
 
+            const_cast<Integrator*>(m_scene->getIntegrator())->preprocess(m_scene.get());
+
             tbb::parallel_for(range, renderImageBlocks);
 
             double ms = static_cast<double>(timer.getElapsedTime().count()) / 1'000'000;
 
             std::cout << "Finished rendering scene. Computed in " << ms << " ms. " << std::endl;
-        });
 
-        m_renderThread.detach();
+            if (m_renderStatus != RenderStatus::Interrupted)
+                m_renderThread.detach();
+
+            m_renderStatus = RenderStatus::Done;
+        });
     }
 
     void RayTracer::generateImageBlocks(int width, int height)
@@ -147,52 +164,31 @@ namespace vesp
 
     void RayTracer::renderBlock(ImageBlock& block, RayTracer::ImageBlockDescriptor& blockDesc, Sampler& sampler, const Scene* scene)
     {
-        //std::default_random_engine eng(std::random_device{}());
-        //std::uniform_real_distribution<float> distrib(0, 1);
-        //std::uniform_int_distribution<int> distribi(1, 5);
-
-        //float sum = 0.f;
-        //for (int i = 0; i < 1000'000; i++)
-        //    sum += distrib(eng);
-
-        // getCamera
-        // getIntegrator
-
-        const Camera* camera = scene->getCamera();
-
-        std::vector<Spectrum> colors;
-        colors.push_back({ 1.f, 1.f, 0.f });
-        colors.push_back({ 0.f, 0.f, 1.f });
-        colors.push_back({ 1.f, 0.f, 1.f });
-        colors.push_back({ 0.f, 1.f, 0.f });
-        
-
         block.clear();
 
-        Point2i offset(blockDesc.x, blockDesc.y);
+        const Sensor* sensor = scene->getSensor();
+        const Integrator* integrator = scene->getIntegrator();
+        size_t numSamples = sampler.getSampleCount();
 
         for (int y = 0; y < block.getSize().y(); ++y)
         {
             for (int x = 0; x < block.getSize().x(); ++x)
             {
-                float px = x + blockDesc.x + sampler.next1D();
-                float py = y + blockDesc.y + sampler.next1D();
-
-                Point2f apertureSample = sampler.next2D();
-
-                Ray3f ray;
-
-                Spectrum response = camera->sampleRay(ray, Point2f(px, py), apertureSample);
-
-                Intersection its;
-                if (scene->rayIntersect(ray, its))
+                for (int s = 0; s < numSamples; s++)
                 {
-                    block(y, x) = colors[2 * its.geomId + its.triId % 2];
-                }
-                else
-                    block(y, x) = Spectrum(px / DefaultImageWidth, py / DefaultImageHeight, 1.f);
+                    float px = x + blockDesc.x + sampler.next1D();
+                    float py = y + blockDesc.y + sampler.next1D();
 
-                //std::cout << "Pixel: " << px << " : " << py << std::endl;
+                    Point2f apertureSample = sampler.next2D();
+
+                    Ray3f ray;
+
+                    Spectrum response = sensor->sampleRay(ray, Point2f(px, py), apertureSample);
+
+                    block(y, x) += response * integrator->Li(scene, &sampler, ray);
+                }
+
+                block(y, x) /= static_cast<float>(numSamples);
             }
         }
     }
@@ -202,5 +198,16 @@ namespace vesp
         std::lock_guard<std::mutex> lock(m_imageMutex);
 
         imageUpdated(imageBlock, xOffset, yOffset);
+    }
+
+    void RayTracer::stopRayTracing()
+    {
+        if (m_renderStatus == RenderStatus::Busy)
+        {
+            m_renderStatus = RenderStatus::Interrupted;
+            m_renderThread.join();
+            m_renderStatus = RenderStatus::Free;
+            std::cout << "Rendering cancelled." << std::endl;
+        }
     }
 }

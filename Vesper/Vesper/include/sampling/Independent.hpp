@@ -2,6 +2,7 @@
 
 #include <random>
 
+#include <core/AttributeList.hpp>
 #include <sampling/Sampler.hpp>
 
 namespace vesp
@@ -9,14 +10,17 @@ namespace vesp
     class IndependentSampler : public Sampler
     {
     public:
+        IndependentSampler(const AttributeList& attributes);
         IndependentSampler();
         ~IndependentSampler();
 
-        virtual void generate();
-        virtual void advance();
+        virtual std::unique_ptr<Sampler> clone() const override;
 
-        virtual float next1D();
-        virtual Point2f next2D();
+        virtual void generate() override;
+        virtual void advance() override;
+
+        virtual float next1D() override;
+        virtual Point2f next2D() override;
 
     private:
         inline float nextFloat();

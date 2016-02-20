@@ -1,9 +1,13 @@
 #pragma once
 
+#include <eigen/Dense>
+
 #include <math/Vector.hpp>
 #include <math/Point.hpp>
 #include <math/Normal.hpp>
 #include <math/Ray.hpp>
+#include <math/RayDifferential.hpp>
+#include <math/BoundingBox.hpp>
 
 namespace vesp
 {
@@ -24,4 +28,7 @@ namespace vesp
     using Normal3f = Normal<float, 3>;
 
     using Ray3f = Ray<Point3f, Vector3f>;
+    using RayDifferential3f = RayDifferential<Point3f, Vector3f>;
+
+    using BoundingBox3f = BoundingBox<Point3f, Vector3f>;
 }

@@ -7,6 +7,8 @@ namespace vesp
     template <typename T, int dimension>
     struct Vector : public Eigen::Matrix<T, dimension, 1>
     {
+        using Base = Eigen::Matrix<Scalar, dimension, 1>;
+
         Vector(T value = static_cast<T>(0))
         {
             Base::setConstant(value);
@@ -40,18 +42,6 @@ namespace vesp
             return *this;
         }
 
-        std::array<T, dimension> toArray() const
-        {
-            std::array<T, dimension> result;
-
-            for (size_t i = 0; i < dimension; ++i)
-            {
-                result[i] = coeff(i);
-            }
-
-            return result;
-        }
-
         std::string toString() const
         {
             std::string result;
@@ -62,8 +52,5 @@ namespace vesp
             }
             return "[" + result + "]";
         }
-
-    private:
-        using Base = Eigen::Matrix<Scalar, dimension, 1>;
     };
 }

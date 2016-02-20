@@ -28,6 +28,12 @@ namespace vesp
         {
         }
 
+        Frame(const Vector3f& n)
+            : n(n)
+        {
+            coordinateSystem(n, s, t);
+        }
+
         inline Vector3f toLocal(const Vector3f& v) const
         {
             return Vector3f(v.dot(s), v.dot(t), v.dot(n));

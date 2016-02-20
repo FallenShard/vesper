@@ -1,7 +1,5 @@
 #pragma once
 
-#include <eigen/Dense>
-
 #include <math/Types.hpp>
 
 namespace vesp
@@ -39,7 +37,7 @@ namespace vesp
             return inverse;
         }
 
-        Transform createInverse() const
+        Transform invert() const
         {
             return Transform(inverse, transform);
         }
@@ -68,6 +66,27 @@ namespace vesp
         Ray3f operator*(const Ray3f& ray) const
         {
             return Ray3f(operator*(ray.o), operator*(ray.d), ray.minT, ray.maxT);
+        }
+
+        Transform& translate(const Vector3f& v)
+        {
+            Transform trans(Eigen::Affine3f(Eigen::Translation3f(v)).matrix());
+            *this = trans * *this;
+            return *this;
+        }
+
+        Transform& scale(const Vector3f& v)
+        {
+            Transform sc(Eigen::Affine3f(Eigen::DiagonalMatrix<float, 3>(v)).matrix());
+            *this = sc * *this;
+            return *this;
+        }
+
+        Transform& rotate(float angle, const Vector3f& axis)
+        {
+            Transform rot(Eigen::Affine3f(Eigen::AngleAxis<float>(angle, axis)).matrix());
+            *this = rot * *this;
+            return *this;
         }
     };
 }

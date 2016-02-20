@@ -1,5 +1,9 @@
 #pragma once
 
+
+#include <tuple>
+
+#include <core/Utils.hpp>
 #include <shapes/TriangleMesh.hpp>
 
 namespace vesp
@@ -7,12 +11,27 @@ namespace vesp
     class WavefrontObjMesh : public TriangleMesh
     {
     public:
-        WavefrontObjMesh();
+        WavefrontObjMesh(const AttributeList& attributes);
         virtual ~WavefrontObjMesh();
 
         virtual unsigned int submitGeometry(GeometryVisitor* visitor) override;
 
     private:
-        int processFaceVertex(const std::string& faceDescriptor);
+        struct ObjVertex
+        {
+            int p = -1;
+            int n = -1;
+            int uv = -1;
+
+            inline ObjVertex();
+            inline ObjVertex(const std::string& str);
+
+            inline bool operator==(const ObjVertex& v) const;
+        };
+
+        struct ObjVertexHasher
+        {
+            std::size_t operator()(const ObjVertex& v) const;
+        };
     };
 }

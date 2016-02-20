@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene>
+
+    <sampler type="independent">
+        <boolean name="lel" value="true" />
+        <boolean name="whut" value="false" />
+        <integer name="numSamples" value="32" />
+        <transform name="toWorld">
+            <translation value="10 15 20" />
+            <scale value="1 2 3" />
+            <rotation axis="1.0 2 2.3" angle="90" />
+        </transform>
+    </sampler>
+
+    <integrator type="test">
+        
+    </integrator>
+
+    <sensor type="perspective">
+        <integer name="imageWidth" value="800" />
+        <integer name="imageHeight" value="600" />
+    </sensor>
+
+    <shape type="objMesh">
+        <string name="filename" value="dragon.obj" />
+
+        <bsdf type="lambertian">
+            <spectrum name="reflectance" value="1.0, 0.4, 0.5" />
+        </bsdf>
+    </shape>
+
+    <shape type="objMesh">
+        <string name="filename" value="cube.obj" />
+
+        <bsdf type="lambertian">
+            <spectrum name="reflectance" value="1.0, 0.4, 0.5" />
+        </bsdf>
+    </shape>
+    
+</scene>

@@ -16,7 +16,9 @@ namespace vesp
 
         //Centroid
 
-        //virtual void configure() = 0;
+        virtual void configure();
+        virtual void setIntersectionInfo(unsigned int triangleId, const Ray3f& ray, Intersection& its) const override;
+
 
         virtual size_t getNumTriangles() const;
         virtual size_t getNumVertices() const;
@@ -30,5 +32,9 @@ namespace vesp
         std::vector<Normal3f> m_normals;
         std::vector<Point2f> m_texCoords;
         std::vector<Point3i> m_faces;
+
+        using Indices = std::tuple<unsigned int, unsigned int, unsigned int>;
+        std::vector<Indices> m_vertices;
+        std::vector<Indices> m_triangles;
     };
 }

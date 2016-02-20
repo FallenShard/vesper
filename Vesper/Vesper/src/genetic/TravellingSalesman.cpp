@@ -1,7 +1,6 @@
-#include <ctime>
 #include <glad/glad.h>
-#include "core/TravellingSalesman.hpp"
-#include <iostream>
+
+#include <genetic/TravellingSalesman.hpp>
 
 namespace vesp
 {

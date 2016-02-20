@@ -1,13 +1,13 @@
 #include <vector>
-#include <thread>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
-#include "core/Renderer.hpp"
-#include "core/Utils.hpp"
-
+#include <core/Utils.hpp>
 #include <core/ImageBlock.hpp>
+
+#include <gui/Renderer.hpp>
+#include <gui/TexturedQuad.hpp>
 
 namespace vesp
 {
@@ -32,16 +32,7 @@ namespace vesp
         m_texQuad = std::make_shared<TexturedQuad>();
         m_texQuad->setTechnique(getTechnique("textured"));
 
-        stbi_set_flip_vertically_on_load(1);
-        int imWidth, imHeight, comps;
-        unsigned char* data = stbi_load("res/kitten.jpeg", &imWidth, &imHeight, &comps, STBI_rgb);
-
-        m_texQuad->setTexture(data, imWidth, imHeight);
         m_bitmap = std::make_shared<Bitmap>(1, 1);
-
-        stbi_image_free(data);
-
-
     }
 
     Renderer::~Renderer()

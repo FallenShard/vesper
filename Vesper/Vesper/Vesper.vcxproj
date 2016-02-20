@@ -92,6 +92,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>glfw3dll.lib;embree.lib;tbb_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -121,6 +122,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <PreprocessorDefinitions>NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -133,55 +135,73 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\acceleration\EmbreeWrapper.cpp" />
-    <ClCompile Include="src\cameras\Camera.cpp" />
-    <ClCompile Include="src\cameras\Perspective.cpp" />
+    <ClCompile Include="src\bsdfs\Lambertian.cpp" />
+    <ClCompile Include="src\sensors\Sensor.cpp" />
+    <ClCompile Include="src\sensors\Perspective.cpp" />
     <ClCompile Include="src\core\Application.cpp" />
+    <ClCompile Include="src\core\AttributeList.cpp" />
     <ClCompile Include="src\core\Bitmap.cpp" />
     <ClCompile Include="src\core\ImageBlock.cpp" />
     <ClCompile Include="src\core\InputMapper.cpp" />
-    <ClCompile Include="src\core\FileParser.cpp" />
+    <ClCompile Include="src\core\VesperException.cpp" />
+    <ClCompile Include="src\io\FileParser.cpp" />
     <ClCompile Include="src\core\RayTracer.cpp" />
-    <ClCompile Include="src\core\Renderer.cpp" />
+    <ClCompile Include="src\gui\Renderer.cpp" />
     <ClCompile Include="src\core\Scene.cpp" />
-    <ClCompile Include="src\core\TexturedQuad.cpp" />
-    <ClCompile Include="src\core\TravellingSalesman.cpp" />
+    <ClCompile Include="src\gui\TexturedQuad.cpp" />
+    <ClCompile Include="src\genetic\TravellingSalesman.cpp" />
+    <ClCompile Include="src\core\VesperObject.cpp" />
+    <ClCompile Include="src\core\VesperObjectFactory.cpp" />
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\integrators\Test.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\math\Operations.cpp" />
     <ClCompile Include="src\sampling\Independent.cpp" />
     <ClCompile Include="src\sampling\Sampler.cpp" />
+    <ClCompile Include="src\shapes\Shape.cpp" />
     <ClCompile Include="src\shapes\TriangleMesh.cpp" />
     <ClCompile Include="src\shapes\WavefrontObjMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\acceleration\EmbreeWrapper.hpp" />
     <ClInclude Include="include\acceleration\GeometryVisitor.hpp" />
-    <ClInclude Include="include\cameras\Camera.hpp" />
-    <ClInclude Include="include\cameras\Perspective.hpp" />
+    <ClInclude Include="include\bsdfs\BSDF.hpp" />
+    <ClInclude Include="include\bsdfs\Lambertian.hpp" />
+    <ClInclude Include="include\core\VesperException.hpp" />
+    <ClInclude Include="include\core\VesperObjectFactory.hpp" />
+    <ClInclude Include="include\sensors\Sensor.hpp" />
+    <ClInclude Include="include\sensors\Perspective.hpp" />
     <ClInclude Include="include\core\Application.hpp" />
+    <ClInclude Include="include\core\AttributeList.hpp" />
     <ClInclude Include="include\core\Bitmap.hpp" />
     <ClInclude Include="include\core\Delegate.hpp" />
     <ClInclude Include="include\core\EventSource.hpp" />
     <ClInclude Include="include\core\ImageBlock.hpp" />
     <ClInclude Include="include\core\InputMapper.hpp" />
-    <ClInclude Include="include\core\FileParser.hpp" />
+    <ClInclude Include="include\io\FileParser.hpp" />
     <ClInclude Include="include\core\RayTracer.hpp" />
-    <ClInclude Include="include\core\Renderer.hpp" />
+    <ClInclude Include="include\core\VesperObject.hpp" />
+    <ClInclude Include="include\gui\Renderer.hpp" />
     <ClInclude Include="include\core\Scene.hpp" />
-    <ClInclude Include="include\core\TexturedQuad.hpp" />
+    <ClInclude Include="include\gui\TexturedQuad.hpp" />
     <ClInclude Include="include\core\Timer.hpp" />
-    <ClInclude Include="include\core\TravellingSalesman.hpp" />
+    <ClInclude Include="include\genetic\TravellingSalesman.hpp" />
     <ClInclude Include="include\core\Utils.hpp" />
     <ClInclude Include="include\integrators\Integrator.hpp" />
+    <ClInclude Include="include\integrators\Test.hpp" />
+    <ClInclude Include="include\math\BoundingBox.hpp" />
     <ClInclude Include="include\math\Frame.hpp" />
     <ClInclude Include="include\math\Normal.hpp" />
     <ClInclude Include="include\math\Operations.hpp" />
     <ClInclude Include="include\math\Point.hpp" />
     <ClInclude Include="include\math\Ray.hpp" />
+    <ClInclude Include="include\math\RayDifferential.hpp" />
     <ClInclude Include="include\math\Transform.hpp" />
     <ClInclude Include="include\math\Types.hpp" />
     <ClInclude Include="include\math\Vector.hpp" />
     <ClInclude Include="include\sampling\Independent.hpp" />
     <ClInclude Include="include\sampling\Sampler.hpp" />
+    <ClInclude Include="include\shapes\Intersection.hpp" />
     <ClInclude Include="include\shapes\Shape.hpp" />
     <ClInclude Include="include\shapes\TriangleMesh.hpp" />
     <ClInclude Include="include\shapes\WavefrontObjMesh.hpp" />
@@ -193,6 +213,11 @@
   <ItemGroup>
     <None Include="res\color_frag.glsl" />
     <None Include="res\color_vert.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="res\example.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

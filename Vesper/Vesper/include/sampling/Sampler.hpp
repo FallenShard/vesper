@@ -1,14 +1,17 @@
 #pragma once
 
 #include <math/Types.hpp>
+#include <core/VesperObject.hpp>
 
 namespace vesp
 {
-    class Sampler
+    class Sampler : public VesperObject
     {
     public:
         Sampler();
         virtual ~Sampler();
+
+        virtual std::unique_ptr<Sampler> clone() const = 0;
 
         virtual void generate() = 0;
         virtual void advance() = 0;

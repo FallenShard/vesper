@@ -5,12 +5,10 @@ namespace vesp
     ImageBlock::ImageBlock(const Vector2i& size)
         : m_pixels(size.y(), size.x())
     {
-
     }
 
     ImageBlock::~ImageBlock()
     {
-
     }
 
     void ImageBlock::initialize(const Vector2i& size)
@@ -44,9 +42,9 @@ namespace vesp
             for (int j = 0; j < m_pixels.cols(); j++)
             {
                 auto val = m_pixels.coeff(i, j);
-                data.push_back(val.r);
-                data.push_back(val.g);
-                data.push_back(val.b);
+                data.push_back(val.r());
+                data.push_back(val.g());
+                data.push_back(val.b());
             }
         }
 

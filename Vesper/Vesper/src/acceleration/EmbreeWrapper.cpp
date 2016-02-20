@@ -7,28 +7,6 @@ namespace vesp
         , m_scene(nullptr)
     {
         m_scene = rtcDeviceNewScene(m_device, RTC_SCENE_STATIC, RTC_INTERSECT1);
-
-        std::vector<Vertex> verts;
-        verts.push_back({ -3.f, -2.f, +15.f, 1.f });
-        verts.push_back({ +3.f, -2.f, +15.f, 1.f });
-        verts.push_back({ +3.f, -2.f, +25.f, 1.f });
-        verts.push_back({ -3.f, -2.f, +25.f, 1.f });
-
-        std::vector<Face> triangles;
-        triangles.push_back({ 0, 1, 2 });
-        triangles.push_back({ 0, 2, 3 });
-
-        unsigned int geomId = rtcNewTriangleMesh(m_scene, RTC_GEOMETRY_STATIC, 2, 4, 1);
-
-        Vertex* vertices = (Vertex*)rtcMapBuffer(m_scene, geomId, RTC_VERTEX_BUFFER);
-        for (int i = 0; i < 4; i++)
-            vertices[i] = verts[i];
-        rtcUnmapBuffer(m_scene, geomId, RTC_VERTEX_BUFFER);
-
-        Face* faces = (Face*)rtcMapBuffer(m_scene, geomId, RTC_INDEX_BUFFER);
-        for (int i = 0; i < 2; i++)
-            faces[i] = triangles[i];
-        rtcUnmapBuffer(m_scene, geomId, RTC_INDEX_BUFFER);
     }
 
     EmbreeWrapper::~EmbreeWrapper()
@@ -44,31 +22,57 @@ namespace vesp
 
     bool EmbreeWrapper::rayIntersect(const Ray3f& ray, HitInfo& hitInfo) const
     {
-        RTCRay m_currentRay;
+        RTCRay rtcRay;
 
         for (size_t i = 0; i < 3; i++)
         {
-            m_currentRay.org[i] = ray.o.coeff(i);
-            m_currentRay.dir[i] = ray.d.coeff(i);
+            rtcRay.org[i] = ray.o.coeff(i);
+            rtcRay.dir[i] = ray.d.coeff(i);
         }
-        m_currentRay.tnear = ray.minT;
-        m_currentRay.tfar  = ray.maxT;
-        m_currentRay.geomID = RTC_INVALID_GEOMETRY_ID;
-        m_currentRay.primID = RTC_INVALID_GEOMETRY_ID;
-        m_currentRay.instID = RTC_INVALID_GEOMETRY_ID;
-        m_currentRay.mask = 0xFFFFFFFF;
-        m_currentRay.time = 0.f;
+        rtcRay.tnear = ray.minT;
+        rtcRay.tfar  = ray.maxT;
+        rtcRay.geomID = RTC_INVALID_GEOMETRY_ID;
+        rtcRay.primID = RTC_INVALID_GEOMETRY_ID;
+        rtcRay.instID = RTC_INVALID_GEOMETRY_ID;
+        rtcRay.mask = 0xFFFFFFFF;
+        rtcRay.time = ray.time;
 
-        rtcIntersect(m_scene, m_currentRay);
+        rtcIntersect(m_scene, rtcRay);
 
-        if (m_currentRay.geomID != RTC_INVALID_GEOMETRY_ID)
+        if (rtcRay.geomID != RTC_INVALID_GEOMETRY_ID)
         {
-            hitInfo.primId = m_currentRay.primID;
-            hitInfo.geomId = m_currentRay.geomID;
+            hitInfo.tHit = rtcRay.tfar;
+            hitInfo.geoN = Vector3f(rtcRay.Ng[0], rtcRay.Ng[1], rtcRay.Ng[2]).normalized();
+            hitInfo.u = rtcRay.u;
+            hitInfo.v = rtcRay.v;
+            hitInfo.primId = rtcRay.primID;
+            hitInfo.geomId = rtcRay.geomID;
+            hitInfo.instId = rtcRay.instID;
             return true;
         }
 
         return false;
+    }
+
+    bool EmbreeWrapper::rayIntersect(const Ray3f& shadowRay) const
+    {
+        RTCRay rtcRay;
+
+        for (size_t i = 0; i < 3; i++)
+        {
+            rtcRay.org[i] = shadowRay.o.coeff(i);
+            rtcRay.dir[i] = shadowRay.d.coeff(i);
+        }
+        rtcRay.tnear = shadowRay.minT;
+        rtcRay.tfar = shadowRay.maxT;
+        rtcRay.geomID = RTC_INVALID_GEOMETRY_ID;
+        rtcRay.primID = RTC_INVALID_GEOMETRY_ID;
+        rtcRay.instID = RTC_INVALID_GEOMETRY_ID;
+        rtcRay.mask = 0xFFFFFFFF;
+        rtcRay.time = shadowRay.time;
+
+        rtcOccluded(m_scene, rtcRay);
+        return rtcRay.geomID == 0;
     }
 
     unsigned int EmbreeWrapper::addTriangleMesh(TriangleMesh* mesh)

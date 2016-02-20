@@ -1,14 +1,18 @@
 #pragma once
 
 #include <eigen/Core>
-#include <array>
 
 namespace vesp
 {
     template <typename T, int dimension>
     struct Point : public Eigen::Matrix<T, dimension, 1>
     {
-        typedef T Scalar;
+        enum
+        {
+            Dim = dimension
+        };
+
+        using Scalar = T;
         using Base = Eigen::Matrix<T, dimension, 1>;
 
         Point(T value = static_cast<T>(0))
@@ -40,20 +44,8 @@ namespace vesp
         template <typename Derived>
         Point& operator=(const Eigen::MatrixBase<Derived>& p)
         {
-            this->base::operator=(p);
+            this->Base::operator=(p);
             return *this;
-        }
-
-        std::array<T, dimension> toArray() const
-        {
-            std::array<T, dimension> result;
-
-            for (size_t i = 0; i < dimension; ++i)
-            {
-                result[i] = coeff(i);
-            }
-
-            return result;
         }
 
         std::string toString() const

@@ -2,25 +2,27 @@
 
 #include <eigen/Dense>
 
-#include <cameras/Camera.hpp>
+#include <sensors/Sensor.hpp>
 #include <math/Transform.hpp>
 #include <math/Operations.hpp>
 
 namespace vesp
 {
-    class PerspectiveCamera : public Camera
+    class PerspectiveSensor : public Sensor
     {
     public:
-        PerspectiveCamera(int width, int height);
+        PerspectiveSensor(const AttributeList& attributes);
 
         virtual Spectrum sampleRay(Ray3f& ray, const Point2f& samplePosition, const Point2f& apertureSample) const;
 
     private:
         Vector2f m_invImageSize;
-        Transform m_sampleToCamera;
-        Transform m_cameraToWorld;
+
         float m_fov;
         float m_nearClip;
         float m_farClip;
+
+        Transform m_sampleToCamera;
+        Transform m_cameraToWorld;
     };
 }

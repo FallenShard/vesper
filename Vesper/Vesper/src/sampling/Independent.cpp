@@ -2,6 +2,13 @@
 
 namespace vesp
 {
+    IndependentSampler::IndependentSampler(const AttributeList& attributes)
+        : m_randomEngine(std::random_device()())
+        , m_distribution(0, 1)
+    {
+        m_sampleCount = attributes.getInteger("numSamples", 64);
+    }
+
     IndependentSampler::IndependentSampler()
         : m_randomEngine(std::random_device()())
         , m_distribution(0, 1)
@@ -11,6 +18,16 @@ namespace vesp
 
     IndependentSampler::~IndependentSampler()
     {
+    }
+
+    std::unique_ptr<Sampler> IndependentSampler::clone() const
+    {
+        IndependentSampler* other = new IndependentSampler();
+        other->m_randomEngine = m_randomEngine;
+        other->m_distribution = m_distribution;
+        other->m_sampleCount = m_sampleCount;
+
+        return std::unique_ptr<Sampler>(other);
     }
 
     void IndependentSampler::generate()

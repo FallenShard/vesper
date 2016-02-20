@@ -5,18 +5,16 @@
 #include <memory>
 
 #include <glad/glad.h>
-
 #include <glfw/glfw3.h>
-
-#include "core/TexturedQuad.hpp"
-#include "core/Bitmap.hpp"
-
-#include "core/ImageBlock.hpp"
-
 #include <tbb/concurrent_queue.h>
+
+#include <core/Bitmap.hpp>
+#include <core/ImageBlock.hpp>
 
 namespace vesp
 {
+    class TexturedQuad;
+
     class Renderer
     {
     public:

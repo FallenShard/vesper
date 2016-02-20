@@ -5,7 +5,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "EventSource.hpp"
+#include <core/EventSource.hpp>
 
 namespace vesp
 {

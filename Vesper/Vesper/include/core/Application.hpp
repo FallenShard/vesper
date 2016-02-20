@@ -4,11 +4,13 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "core/InputMapper.hpp"
-#include "core/Renderer.hpp"
-#include "core/RayTracer.hpp"
-#include "core/ImageBlock.hpp"
-#include "core/TravellingSalesman.hpp"
+#include <core/InputMapper.hpp>
+#include <core/RayTracer.hpp>
+#include <core/ImageBlock.hpp>
+
+#include <gui/Renderer.hpp>
+
+#include <genetic/TravellingSalesman.hpp>
 
 namespace vesp
 {

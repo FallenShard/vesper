@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "core/TexturedQuad.hpp"
+#include <gui/TexturedQuad.hpp>
 
 namespace vesp
 {
@@ -93,9 +93,10 @@ namespace vesp
 
     void TexturedQuad::setTextureSize(int width, int height)
     {
+        std::vector<GLfloat> emptyData(width * height * 3, 0);
         glActiveTexture(GL_TEXTURE0 + 1);
         glBindTexture(GL_TEXTURE_2D, m_texId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, emptyData.data());
     }
 
     void TexturedQuad::setHdriTexture(const float* data, int width, int height)

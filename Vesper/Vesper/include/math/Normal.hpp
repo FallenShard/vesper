@@ -7,6 +7,8 @@ namespace vesp
     template <typename T, int dimension>
     struct Normal : public Eigen::Matrix<T, dimension, 1>
     {
+        using Base = Eigen::Matrix<Scalar, dimension, 1>;
+
         Normal(T value = static_cast<T>(0))
         {
             Base::setConstant(value);
@@ -36,7 +38,7 @@ namespace vesp
         template <typename Derived>
         Normal& operator=(const Eigen::MatrixBase<Derived>& p)
         {
-            this->base::operator=(p);
+            this->Base::operator=(p);
             return *this;
         }
 
@@ -50,8 +52,5 @@ namespace vesp
             }
             return "[" + result + "]";
         }
-
-    private:
-        using Base = Eigen::Matrix<Scalar, dimension, 1>;
     };
 }
