@@ -18,9 +18,7 @@ namespace vesp
             return;
         }
 
-        auto mat = Eigen::Translation<float, 3>(-0.f, -1.f, 5.f) * Eigen::DiagonalMatrix<float, 3>(Vector3f(.25, .25, .25)) * Eigen::Matrix4f::Identity();
-
-        Transform trans(mat);
+        m_toWorld = attributes.getTransform("toWorld", Transform());
 
         std::cout << "Loading Wavefront Obj mesh: " + meshFilename << std::endl;
 
@@ -41,8 +39,8 @@ namespace vesp
             {
                 Point3f p;
                 lineStream >> p.x() >> p.y() >> p.z();
-                p = trans * p;
-                m_positions.push_back({ p.x(), p.y(), p.z() });
+                p = m_toWorld * p;
+                m_positions.push_back(p);
             }
             else if (prefix == "vt")
             {
@@ -54,7 +52,7 @@ namespace vesp
             {
                 Normal3f n;
                 lineStream >> n.x() >> n.y() >> n.z();
-                m_normals.push_back((trans * n).normalized());
+                m_normals.push_back((m_toWorld * n).normalized());
             }
             else if (prefix == "f")
             {
