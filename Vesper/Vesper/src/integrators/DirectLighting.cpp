@@ -1,10 +1,5 @@
 #include <integrators/DirectLighting.hpp>
-#include <core/Scene.hpp>
-#include <math/Operations.hpp>
-#include <shapes/Intersection.hpp>
-#include <bsdfs/BSDF.hpp>
-#include <shapes/Shape.hpp>
-#include <emitters/Emitter.hpp>
+
 
 namespace vesp
 {
@@ -24,7 +19,7 @@ namespace vesp
     {
         Intersection its;
         if (!scene->rayIntersect(ray, its))
-            return Spectrum(0.1f);
+            return Spectrum(0.0f);
 
         EmitterSample emSam;
         emSam.ref = its.p;
@@ -39,6 +34,10 @@ namespace vesp
         bsdfSam.wo = its.toLocal(-ray.d);
         auto bsdf = its.shape->getBSDF()->eval(bsdfSam);
 
-        return bsdf * light * cosFactor;
+        Spectrum color = bsdf * light * cosFactor;
+        if (its.shape->getEmitter())
+            color += its.shape->getEmitter()->eval(emSam);
+
+        return color;
     }
 }

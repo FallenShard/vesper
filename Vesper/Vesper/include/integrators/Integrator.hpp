@@ -3,6 +3,12 @@
 #include <spectrum/Spectrum.hpp>
 #include <math/Types.hpp>
 #include <core/VesperObject.hpp>
+#include <core/Scene.hpp>
+#include <math/Operations.hpp>
+#include <shapes/Intersection.hpp>
+#include <bsdfs/BSDF.hpp>
+#include <shapes/Shape.hpp>
+#include <emitters/Emitter.hpp>
 
 namespace vesp
 {
