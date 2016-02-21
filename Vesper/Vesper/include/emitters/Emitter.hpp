@@ -32,7 +32,7 @@ namespace vesp
         virtual Spectrum sample(EmitterSample& emitterSample, Sampler& sampler) const = 0;
         virtual float pdf(const EmitterSample& emitterSample) const = 0;
         
-        virtual Spectrum samplePhoton(Ray3f& ray, const Sampler& sampler) const = 0;
+        virtual Spectrum samplePhoton(Ray3f& ray, Sampler& sampler) const = 0;
 
         virtual ClassType getClassType() const override { return ClassType::Emitter; }
 

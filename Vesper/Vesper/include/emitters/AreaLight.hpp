@@ -4,11 +4,10 @@
 
 namespace vesp
 {
-    class PointLight : public Emitter
+    class AreaLight : public Emitter
     {
     public:
-        PointLight(const AttributeList& attributes);
-        ~PointLight();
+        AreaLight(const AttributeList& attributes);
 
         virtual Spectrum eval(const EmitterSample& emitterSample) const override;
         virtual Spectrum sample(EmitterSample& emitterSample, Sampler& sampler) const override;
@@ -17,7 +16,6 @@ namespace vesp
         virtual Spectrum samplePhoton(Ray3f& ray, Sampler& sampler) const override;
 
     private:
-        Point3f m_position;
-        Spectrum m_power;
+        Spectrum m_radiance;
     };
 }

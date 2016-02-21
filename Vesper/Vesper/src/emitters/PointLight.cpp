@@ -36,7 +36,7 @@ namespace vesp
         return 0.f;
     }
 
-    Spectrum PointLight::samplePhoton(Ray3f& ray, const Sampler& sampler) const
+    Spectrum PointLight::samplePhoton(Ray3f& ray, Sampler& sampler) const
     {
         return Spectrum();
     }
