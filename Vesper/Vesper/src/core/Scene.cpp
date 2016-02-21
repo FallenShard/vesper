@@ -51,7 +51,7 @@ namespace vesp
             auto shape = std::static_pointer_cast<Shape>(child);
             m_shapes.emplace_back(shape);
 
-            if (shape->getEmitter()) 
+            if (shape->getEmitter())
                 m_emitters.emplace_back(shape->getEmitterManaged());
             break;
         }

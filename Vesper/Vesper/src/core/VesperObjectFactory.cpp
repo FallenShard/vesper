@@ -4,6 +4,7 @@
 #include <sampling/Independent.hpp>
 
 #include <integrators/DirectLighting.hpp>
+#include <integrators/AmbientOcclusion.hpp>
 
 #include <sensors/Perspective.hpp>
 
@@ -12,7 +13,7 @@
 #include <bsdfs/Lambertian.hpp>
 
 #include <emitters/PointLight.hpp>
-
+#include <emitters/AreaLight.hpp>
 
 namespace vesp
 {
@@ -28,6 +29,7 @@ namespace vesp
             registerClass<IndependentSampler>("independent");
 
             registerClass<DirectLightingIntegrator>("direct-lighting");
+            registerClass<AmbientOcclusionIntegrator>("ambient-occlusion");
 
             registerClass<PerspectiveSensor>("perspective");
         
@@ -36,6 +38,7 @@ namespace vesp
             registerClass<LambertianBSDF>("lambertian");
 
             registerClass<PointLight>("point");
+            registerClass<AreaLight>("area");
 
             initialized = true;
         }

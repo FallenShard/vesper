@@ -219,6 +219,29 @@ namespace vesp
                                 Vector3f axisVec = parseFloat3<Vector3f>(axisStr);
                                 transform.rotate(degToRad(std::stof(angleStr)), axisVec.normalized());
                             }
+                            else if (transformStr == "lookat")
+                            {
+                                auto originAttrib = transChild->first_attribute("origin");
+                                auto targetAttrib = transChild->first_attribute("target");
+                                auto upAttrib = transChild->first_attribute("up");
+                                if (!originAttrib)
+                                    throw VesperException("Look-at has no origin specified!");
+                                if (!targetAttrib)
+                                    throw VesperException("Look-at has no target specified!");
+                                if (!upAttrib)
+                                    throw VesperException("Look-at has no up specified!");
+
+                                Vector3f origin = parseFloat3<Vector3f>(originAttrib->value());
+                                Vector3f target = parseFloat3<Vector3f>(targetAttrib->value());
+                                Vector3f up = parseFloat3<Vector3f>(upAttrib->value());
+                                Vector3f dir = (target - origin).normalized();
+                                Vector3f right = dir.normalized().cross(up).normalized();
+                                Vector3f newUp = right.normalized().cross(dir).normalized();
+
+                                Eigen::Matrix4f lookat;
+                                lookat << right, newUp, dir, origin, 0, 0, 0, 1;
+                                transform = Transform(lookat) * transform;
+                            }
                         }
 
                         attribList.setTransform(nameStr, transform);

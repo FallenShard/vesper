@@ -7,31 +7,32 @@ namespace vesp
     {
         m_imageSize.x() = attributes.getInteger("imageWidth", 800);
         m_imageSize.y() = attributes.getInteger("imageHeight", 600);
-        m_fov = attributes.getFloat("fov", 45.f);
+        m_fov = attributes.getFloat("fov", 70);
         m_nearClip = attributes.getFloat("nearClip", 1e-4f);
         m_farClip = attributes.getFloat("farClip", 1e4f);
 
         m_invImageSize = m_imageSize.cast<float>().cwiseInverse();
 
-        m_cameraToWorld = Transform(Eigen::Affine3f(Eigen::Translation3f(0.f, 0.f, 0.f)).matrix());
+        m_cameraToWorld = attributes.getTransform("toWorld", Transform());
+    }
 
-        //config
+    void PerspectiveSensor::configure()
+    {
         float aspect = m_imageSize.x() / static_cast<float>(m_imageSize.y());
-
         float recip = 1.f / (m_farClip - m_nearClip);
         float cot = 1.f / std::tanf(degToRad(m_fov / 2.f));
 
-        Eigen::Matrix4f perspective;
-        perspective <<
+        Eigen::Matrix4f mat;
+        mat <<
             cot, 0, 0, 0,
             0, cot, 0, 0,
             0, 0, m_farClip * recip, -m_nearClip * m_farClip * recip,
             0, 0, 1, 0;
+        Transform perspective(mat);
+        Transform scale = Transform::createScale(Vector3f(0.5f, 0.5f * aspect, 1.f));
+        Transform shift = Transform::createTranslation(Vector3f(1.f, 1.f / aspect, 0.f));
 
-        Eigen::DiagonalMatrix<float, 3> scale(Vector3f(0.5f, 0.5f * aspect, 1.f));
-        Eigen::Translation<float, 3> shift(1.f, 1.f / aspect, 0.f);
-
-        m_sampleToCamera = Transform(scale * shift * perspective).invert();
+        m_sampleToCamera = (scale * shift * perspective).invert();
     }
 
     Spectrum PerspectiveSensor::sampleRay(Ray3f& ray, const Point2f& samplePosition, const Point2f& apertureSample) const

@@ -13,6 +13,8 @@ namespace vesp
     public:
         PerspectiveSensor(const AttributeList& attributes);
 
+        virtual void configure() override;
+
         virtual Spectrum sampleRay(Ray3f& ray, const Point2f& samplePosition, const Point2f& apertureSample) const;
 
     private:

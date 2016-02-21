@@ -92,7 +92,7 @@ namespace vesp
     {
         glClearColor(0.0f, 0.3f, 0.0f, 1.0f);
 
-        m_rayTracer->initializeScene("res/example.xml");
+        m_rayTracer->initializeScene("res/cornell_box.xml");
         m_rayTracer->startRayTracing();
 
         while (!glfwWindowShouldClose(m_mainWindow))

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <math/Types.hpp>
+#include <math/Operations.hpp>
 
 namespace vesp
 {
@@ -87,6 +88,21 @@ namespace vesp
             Transform rot(Eigen::Affine3f(Eigen::AngleAxis<float>(angle, axis)).matrix());
             *this = rot * *this;
             return *this;
+        }
+
+        static Transform createTranslation(const Vector3f& v)
+        {
+            return Eigen::Affine3f(Eigen::Translation3f(v)).matrix();
+        }
+
+        static Transform createScale(const Vector3f& v)
+        {
+            return Eigen::Affine3f(Eigen::DiagonalMatrix<float, 3>(v)).matrix();
+        }
+
+        static Transform createRotation(float angle, const Vector3f& axis)
+        {
+            return Eigen::Affine3f(Eigen::AngleAxis<float>(angle, axis)).matrix();
         }
     };
 }
