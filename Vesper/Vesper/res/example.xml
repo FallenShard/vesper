@@ -12,7 +12,7 @@
         </transform>
     </sampler>
 
-    <integrator type="test">
+    <integrator type="direct-lighting">
         
     </integrator>
 
@@ -28,6 +28,11 @@
             <spectrum name="reflectance" value="1.0, 0.4, 0.5" />
         </bsdf>
     </shape>
+
+    <emitter type="point">
+        <point3 name="position" value="0 0 2" />
+        <spectrum name="power" value="150 350 150" />
+    </emitter>
 
     <shape type="objMesh">
         <string name="filename" value="cube.obj" />

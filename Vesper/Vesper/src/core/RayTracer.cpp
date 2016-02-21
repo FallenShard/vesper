@@ -185,7 +185,7 @@ namespace vesp
 
                     Spectrum response = sensor->sampleRay(ray, Point2f(px, py), apertureSample);
 
-                    block(y, x) += response * integrator->Li(scene, &sampler, ray);
+                    block(y, x) += response * integrator->Li(scene, sampler, ray);
                 }
 
                 block(y, x) /= static_cast<float>(numSamples);

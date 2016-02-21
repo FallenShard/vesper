@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <math/Types.hpp>
+#include <spectrum/Spectrum.hpp>
 
 namespace vesp
 {
@@ -10,9 +11,13 @@ namespace vesp
     class Sampler;
     class Integrator;
     class Sensor;
+    class Emitter;
     class Shape;
-    struct Intersection;
+    
     class EmbreeWrapper;
+
+    struct Intersection;
+    struct EmitterSample;
 
     class Scene
     {
@@ -27,6 +32,10 @@ namespace vesp
         const Integrator* getIntegrator() const;
         const Sensor* getSensor() const;
 
+        const Emitter* getRandomEmitter(float sample) const;
+        float getEmitterPdf() const;
+        Spectrum sampleEmitter(const Intersection& its, Sampler& sampler, EmitterSample& emitterSample) const;
+
         bool rayIntersect(const Ray3f& ray, Intersection& its) const;
         bool rayIntersect(const Ray3f& shadowRay) const;
         
@@ -34,12 +43,14 @@ namespace vesp
         std::shared_ptr<EmbreeWrapper> m_embreeWrapper;
 
         std::shared_ptr<Sampler> m_sampler;
+        std::shared_ptr<Integrator> m_integrator;
 
+        std::vector<std::shared_ptr<Emitter>> m_emitters;
         std::vector<std::shared_ptr<Shape>> m_shapes;
 
         std::shared_ptr<Sensor> m_sensor;
 
-        std::shared_ptr<Integrator> m_integrator;
+        
 
         Vector2i m_imageSize;
     };

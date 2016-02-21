@@ -136,6 +136,8 @@
   <ItemGroup>
     <ClCompile Include="src\acceleration\EmbreeWrapper.cpp" />
     <ClCompile Include="src\bsdfs\Lambertian.cpp" />
+    <ClCompile Include="src\emitters\PointLight.cpp" />
+    <ClCompile Include="src\sampling\DiscretePdf.cpp" />
     <ClCompile Include="src\sensors\Sensor.cpp" />
     <ClCompile Include="src\sensors\Perspective.cpp" />
     <ClCompile Include="src\core\Application.cpp" />
@@ -153,7 +155,7 @@
     <ClCompile Include="src\core\VesperObject.cpp" />
     <ClCompile Include="src\core\VesperObjectFactory.cpp" />
     <ClCompile Include="src\glad.c" />
-    <ClCompile Include="src\integrators\Test.cpp" />
+    <ClCompile Include="src\integrators\DirectLighting.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\Operations.cpp" />
     <ClCompile Include="src\sampling\Independent.cpp" />
@@ -169,6 +171,9 @@
     <ClInclude Include="include\bsdfs\Lambertian.hpp" />
     <ClInclude Include="include\core\VesperException.hpp" />
     <ClInclude Include="include\core\VesperObjectFactory.hpp" />
+    <ClInclude Include="include\emitters\Emitter.hpp" />
+    <ClInclude Include="include\emitters\PointLight.hpp" />
+    <ClInclude Include="include\sampling\DiscretePdf.hpp" />
     <ClInclude Include="include\sensors\Sensor.hpp" />
     <ClInclude Include="include\sensors\Perspective.hpp" />
     <ClInclude Include="include\core\Application.hpp" />
@@ -188,7 +193,7 @@
     <ClInclude Include="include\genetic\TravellingSalesman.hpp" />
     <ClInclude Include="include\core\Utils.hpp" />
     <ClInclude Include="include\integrators\Integrator.hpp" />
-    <ClInclude Include="include\integrators\Test.hpp" />
+    <ClInclude Include="include\integrators\DirectLighting.hpp" />
     <ClInclude Include="include\math\BoundingBox.hpp" />
     <ClInclude Include="include\math\Frame.hpp" />
     <ClInclude Include="include\math\Normal.hpp" />

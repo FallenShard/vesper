@@ -54,9 +54,6 @@
     <ClCompile Include="src\shapes\TriangleMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\integrators\Test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\AttributeList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -94,6 +91,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gui\TexturedQuad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sampling\DiscretePdf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\emitters\PointLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\integrators\DirectLighting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -194,9 +200,6 @@
     <ClInclude Include="include\math\BoundingBox.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\integrators\Test.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\shapes\Intersection.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -234,6 +237,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\bsdfs\Lambertian.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sampling\DiscretePdf.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\emitters\Emitter.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\emitters\PointLight.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\integrators\DirectLighting.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

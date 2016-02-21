@@ -40,7 +40,7 @@ namespace vesp
     public:
         virtual ~BSDF() {};
         virtual Spectrum eval(const BSDFSample& bsdfSample) const = 0;
-        virtual Spectrum sample(BSDFSample& bsdfSample, const Sampler& sampler) const = 0;
+        virtual Spectrum sample(BSDFSample& bsdfSample, Sampler& sampler) const = 0;
         virtual float pdf(const BSDFSample& bsdfSample) const = 0;
         virtual unsigned int getType() const = 0;
 

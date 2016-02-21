@@ -17,11 +17,10 @@ namespace vesp
         return m_reflectance * InvPI;
     }
 
-    Spectrum LambertianBSDF::sample(BSDFSample& bsdfSample, const Sampler& sampler) const
+    Spectrum LambertianBSDF::sample(BSDFSample& bsdfSample, Sampler& sampler) const
     {
         // eval() / pdf() = albedo * invPI / (cosThetaI * invPI) * cosThetaI(subtension)
         // account for cosine subtension = just albedo :)
-        // not yet
         return m_reflectance;
     }
 

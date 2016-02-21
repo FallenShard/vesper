@@ -6,11 +6,11 @@
 #include <shapes/Intersection.hpp>
 #include <core/VesperObject.hpp>
 
-#include <bsdfs/BSDF.hpp>
-
 namespace vesp
 {
     class GeometryVisitor;
+    class BSDF;
+    class Emitter;
 
     class Shape : public VesperObject
     {
@@ -23,9 +23,14 @@ namespace vesp
 
         const BSDF* getBSDF() const;
 
+        const Emitter* getEmitter() const;
+
+        std::shared_ptr<Emitter> getEmitterManaged() const;
+
         virtual ClassType getClassType() const override { return ClassType::Shape; }
 
     private:
         std::shared_ptr<BSDF> m_bsdf;
+        std::shared_ptr<Emitter> m_emitter;
     };
 }

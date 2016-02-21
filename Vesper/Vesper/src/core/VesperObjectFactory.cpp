@@ -3,13 +3,15 @@
 
 #include <sampling/Independent.hpp>
 
-#include <integrators/Test.hpp>
+#include <integrators/DirectLighting.hpp>
 
 #include <sensors/Perspective.hpp>
 
 #include <shapes/WavefrontObjMesh.hpp>
 
 #include <bsdfs/Lambertian.hpp>
+
+#include <emitters/PointLight.hpp>
 
 
 namespace vesp
@@ -25,14 +27,15 @@ namespace vesp
 
             registerClass<IndependentSampler>("independent");
 
-            registerClass<TestIntegrator>("test");
+            registerClass<DirectLightingIntegrator>("direct-lighting");
 
             registerClass<PerspectiveSensor>("perspective");
         
             registerClass<WavefrontObjMesh>("objMesh");
 
             registerClass<LambertianBSDF>("lambertian");
-            
+
+            registerClass<PointLight>("point");
 
             initialized = true;
         }
