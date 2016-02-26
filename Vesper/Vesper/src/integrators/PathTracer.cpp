@@ -16,14 +16,30 @@ namespace vesp
 
     Spectrum PathTracer::Li(const Scene* scene, Sampler& sampler, Ray3f& ray) const
     {
-        Spectrum color(0.f);
+        Spectrum L(0.f);
 
         Intersection its;
+
+        Spectrum throughput(1.f);
         
         while (true)
         {
-            if (scene->rayIntersect(ray, its))
-                return Spectrum(0.f);
+            if (!scene->rayIntersect(ray, its))
+                return L;
+
+            if (its.shape->getEmitter())
+            {
+                EmitterSample emittanceSample(ray.o, its.p, its.shFrame.n);
+                L += throughput * its.shape->getEmitter()->eval(emittanceSample);
+            }
+
+            BSDFSample bsdfSample(its.p, its.toLocal(-ray.d));
+            Spectrum bsdf = its.shape->getBSDF()->sample(bsdfSample, sampler);
+            throughput *= bsdf;
+
+            ray.o = its.p;
+            ray.d = its.toWorld(bsdfSample.wo);
+            ray.update();
         }
     }
 }

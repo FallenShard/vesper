@@ -6,6 +6,7 @@ namespace vesp
 {
     class PathTracer : public Integrator
     {
+    public:
         PathTracer(const AttributeList& attributes);
         virtual ~PathTracer();
 
