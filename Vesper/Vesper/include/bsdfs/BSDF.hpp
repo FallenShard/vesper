@@ -33,6 +33,10 @@ namespace vesp
 
         unsigned int interactionType; // Evaluated interaction event type
         unsigned int requestedType;   // Requested type before sampling
+
+        BSDFSample() {}
+        BSDFSample(const Point3f& p, const Vector3f& wi) : p(p), wi(wi) {}
+        BSDFSample(const Point3f& p, const Vector3f& wi, const Vector3f& wo) : p(p), wi(wi), wo(wo) {}
     };
 
     class BSDF : public VesperObject
