@@ -17,6 +17,14 @@ namespace vesp
         float pdf;   // Probability of selecting sampled emitter point
 
         Ray3f shadowRay; // Accompanying shadow ray
+
+        EmitterSample() {}
+
+        // To be used when evaluating the emitter
+        EmitterSample(const Point3f& ref, const Point3f& p, const Normal3f& n) : ref(ref), p(p), n(n) {}
+
+        // To be used when sampling the emitter
+        EmitterSample(const Point3f& ref) : ref(ref) {}
     };
 
     class Emitter : public VesperObject
