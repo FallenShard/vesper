@@ -21,8 +21,13 @@ namespace vesp
         if (!scene->rayIntersect(ray, its))
             return Spectrum(0.0f);
 
-        EmitterSample emSam;
-        emSam.ref = its.p;
+        if (its.shape->getEmitter())
+        {
+            EmitterSample emittanceSample(ray.o, its.p, its.shFrame.n);
+            return its.shape->getEmitter()->eval(emittanceSample);
+        }
+
+        EmitterSample emSam(its.p);
         auto light = scene->sampleEmitter(its, sampler, emSam);
 
         float cosFactor = its.shFrame.n.dot(emSam.wi);
