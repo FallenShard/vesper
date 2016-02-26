@@ -2,44 +2,66 @@
 <scene>
 
     <sampler type="independent">
-        <boolean name="lel" value="true" />
-        <boolean name="whut" value="false" />
-        <integer name="numSamples" value="32" />
-        <transform name="toWorld">
-            <translation value="10 15 20" />
-            <scale value="1 2 3" />
-            <rotation axis="1.0 2 2.3" angle="90" />
-        </transform>
+        <integer name="numSamples" value="256" />
     </sampler>
 
-    <integrator type="direct-lighting">
+    <integrator type="path-tracer">
         
     </integrator>
 
     <sensor type="perspective">
         <integer name="imageWidth" value="800" />
         <integer name="imageHeight" value="600" />
+        <transform name="toWorld">
+            <lookat origin="0 0 0" target="0 0 -1" up="0 1 0" />
+        </transform>
     </sensor>
 
     <shape type="objMesh">
-        <string name="filename" value="dragon.obj" />
+        <string name="filename" value="bunny.obj" />
+
+        <transform name="toWorld">
+            <scale value="0.05 0.05 0.05" />
+            <translation value="0 -1 -7" />
+        </transform>
 
         <bsdf type="lambertian">
-            <spectrum name="reflectance" value="1.0, 0.4, 0.5" />
+            <spectrum name="reflectance" value="0.3, 0.8, 0.1" />
         </bsdf>
     </shape>
-
-    <emitter type="point">
-        <point3 name="position" value="0 0 2" />
-        <spectrum name="power" value="150 350 150" />
-    </emitter>
 
     <shape type="objMesh">
         <string name="filename" value="cube.obj" />
 
+        <transform name="toWorld">
+            <translation value="0 5 -7" />
+        </transform>
+
         <bsdf type="lambertian">
-            <spectrum name="reflectance" value="1.0, 0.4, 0.5" />
+            <spectrum name="reflectance" value="1.0, 1.0, 1.0" />
+        </bsdf>
+
+        <emitter type="area">
+            <spectrum name="radiance" value="40 50 25" />
+        </emitter>
+    </shape>
+
+    <shape type="objMesh">
+        <string name="filename" value="plane.obj" />
+
+        <transform name="toWorld">
+            <scale value="30 1 30" />
+            <translation value="0 -2 0" />
+        </transform>
+
+        <bsdf type="lambertian">
+            <spectrum name="reflectance" value="0.7, 0.5, 0.7" />
         </bsdf>
     </shape>
+
+    <!--<emitter type="point">
+        <point3 name="position" value="0 0 2" />
+        <spectrum name="power" value="150 350 150" />
+    </emitter>-->
     
 </scene>
