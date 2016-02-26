@@ -11,6 +11,7 @@
 #include <core/Scene.hpp>
 #include <core/Timer.hpp>
 #include <core/VesperException.hpp>
+#include <core/VesperObjectFactory.hpp>
 
 #include <sampling/Sampler.hpp>
 #include <sensors/Sensor.hpp>
@@ -36,6 +37,8 @@ namespace vesp
         // Recommended for embree before thread creation
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
         _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+
+        VesperObjectFactory::initialize();
     }
 
     RayTracer::~RayTracer()

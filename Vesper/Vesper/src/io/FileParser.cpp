@@ -128,7 +128,7 @@ namespace vesp
                     {
                     case AttributeType::Boolean:
                     {
-                        bool val = !strcmp(xmlValueAttrib->value(), "true");
+                        bool val = valueStr.compare("true") == 0;
                         attribList.setBoolean(nameStr, val);
                         break;
                     }
