@@ -114,6 +114,9 @@
     <ClCompile Include="src\emitters\AreaLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\integrators\Normals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\Application.hpp">
@@ -275,6 +278,12 @@
     <ClInclude Include="include\emitters\AreaLight.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\reconstruction\ReconstructionFilter.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\integrators\Normals.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\color_vert.glsl" />
@@ -282,5 +291,6 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="res\example.xml" />
+    <Xml Include="res\cornellbox.xml" />
   </ItemGroup>
 </Project>

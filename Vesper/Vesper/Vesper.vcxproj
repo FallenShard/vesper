@@ -139,6 +139,7 @@
     <ClCompile Include="src\emitters\AreaLight.cpp" />
     <ClCompile Include="src\emitters\PointLight.cpp" />
     <ClCompile Include="src\integrators\AmbientOcclusion.cpp" />
+    <ClCompile Include="src\integrators\Normals.cpp" />
     <ClCompile Include="src\integrators\PathTracer.cpp" />
     <ClCompile Include="src\sampling\DiscretePdf.cpp" />
     <ClCompile Include="src\sampling\Warp.cpp" />
@@ -179,7 +180,9 @@
     <ClInclude Include="include\emitters\Emitter.hpp" />
     <ClInclude Include="include\emitters\PointLight.hpp" />
     <ClInclude Include="include\integrators\AmbientOcclusion.hpp" />
+    <ClInclude Include="include\integrators\Normals.hpp" />
     <ClInclude Include="include\integrators\PathTracer.hpp" />
+    <ClInclude Include="include\reconstruction\ReconstructionFilter.hpp" />
     <ClInclude Include="include\sampling\DiscretePdf.hpp" />
     <ClInclude Include="include\sampling\Warp.hpp" />
     <ClInclude Include="include\sensors\Sensor.hpp" />
@@ -228,6 +231,7 @@
     <None Include="res\color_vert.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="res\cornellbox.xml" />
     <Xml Include="res\example.xml">
       <SubType>Designer</SubType>
     </Xml>
