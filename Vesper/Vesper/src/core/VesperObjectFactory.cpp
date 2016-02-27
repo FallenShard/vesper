@@ -6,6 +6,7 @@
 #include <integrators/DirectLighting.hpp>
 #include <integrators/AmbientOcclusion.hpp>
 #include <integrators/PathTracer.hpp>
+#include <integrators/Normals.hpp>
 
 #include <sensors/Perspective.hpp>
 
@@ -32,6 +33,7 @@ namespace vesp
             registerClass<DirectLightingIntegrator>("direct-lighting");
             registerClass<AmbientOcclusionIntegrator>("ambient-occlusion");
             registerClass<PathTracer>("path-tracer");
+            registerClass<NormalsIntegrator>("normals");
 
             registerClass<PerspectiveSensor>("perspective");
         
