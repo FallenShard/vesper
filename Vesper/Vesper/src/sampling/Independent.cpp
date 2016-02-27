@@ -22,12 +22,12 @@ namespace vesp
 
     std::unique_ptr<Sampler> IndependentSampler::clone() const
     {
-        IndependentSampler* other = new IndependentSampler();
+        std::unique_ptr<IndependentSampler> other = std::make_unique<IndependentSampler>();
         other->m_randomEngine = m_randomEngine;
         other->m_distribution = m_distribution;
         other->m_sampleCount = m_sampleCount;
 
-        return std::unique_ptr<Sampler>(other);
+        return std::move(other);
     }
 
     void IndependentSampler::generate()
