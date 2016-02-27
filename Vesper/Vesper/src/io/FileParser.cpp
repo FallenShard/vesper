@@ -16,10 +16,6 @@ namespace vesp
 {
     std::shared_ptr<Scene> FileParser::loadFromXml(const std::string& filename)
     {
-        // Internal check in factory makes sure this function will only effectively run the function once! FIX!!
-        // DO NOT ASSUME ABOUT IMPLEMENTATION OF STUFF
-        VesperObjectFactory::initialize();
-
         // Load the scene file
         std::ifstream sceneFile(filename);
         std::stringstream buffer;
