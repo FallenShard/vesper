@@ -18,15 +18,15 @@ namespace vesp
     {
         if (std::fabsf(v1.x()) > std::fabsf(v1.y()))
         {
-            float invLen = 1.f / sqrtf(v1.x() * v1.x() + v1.z() + v1.z());
-            v2 = Vector3f(v1.z() * invLen, 0.f, -v1.x() * invLen);
+            float invLen = 1.f / std::sqrtf(v1.x() * v1.x() + v1.z() * v1.z());
+            v3 = Vector3f(v1.z() * invLen, 0.f, -v1.x() * invLen);
         }
         else
         {
-            float invLen = 1.f / sqrtf(v1.y() * v1.y() + v1.z() + v1.z());
-            v2 = Vector3f(0.f, v1.z() * invLen, -v1.y() * invLen);
+            float invLen = 1.f / std::sqrtf(v1.y() * v1.y() + v1.z() * v1.z());
+            v3 = Vector3f(0.f, v1.z() * invLen, -v1.y() * invLen);
         }
-        v3 = v2.cross(v1);
+        v2 = v3.cross(v1);
     }
 
     Normal3f faceForward(const Normal3f& n, const Vector3f& v)
