@@ -59,5 +59,7 @@ namespace vesp
         std::atomic<RenderStatus> m_renderStatus;
         std::atomic<float> m_progress;
         std::mutex m_imageMutex;
+        int m_blocksRendered;
+        int m_totalBlocks;
     };
 }

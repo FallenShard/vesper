@@ -163,6 +163,9 @@ namespace vesp
 
             currRow += BlockSize;
         }
+
+        m_blocksRendered = 0;
+        m_totalBlocks = static_cast<int>(m_blockQueue.unsafe_size());
     }
 
     void RayTracer::renderBlock(ImageBlock& block, RayTracer::ImageBlockDescriptor& blockDesc, Sampler& sampler, const Scene* scene)
@@ -177,16 +180,14 @@ namespace vesp
         {
             for (int x = 0; x < block.getSize().x(); ++x)
             {
+                float weightSum = 0.f;
                 for (int s = 0; s < numSamples; s++)
                 {
-                    float px = x + blockDesc.x + sampler.next1D();
-                    float py = y + blockDesc.y + sampler.next1D();
-
+                    Point2f pixelSample(x + blockDesc.x + sampler.next1D(), y + blockDesc.y + sampler.next1D());
                     Point2f apertureSample = sampler.next2D();
 
                     Ray3f ray;
-
-                    Spectrum response = sensor->sampleRay(ray, Point2f(px, py), apertureSample);
+                    Spectrum response = sensor->sampleRay(ray, pixelSample, apertureSample);
 
                     block(y, x) += response * integrator->Li(scene, sampler, ray);
                 }
@@ -199,6 +200,9 @@ namespace vesp
     void RayTracer::updateImage(ImageBlock& imageBlock, int xOffset, int yOffset)
     {
         std::lock_guard<std::mutex> lock(m_imageMutex);
+
+        m_blocksRendered++;
+        std::cout << "Blocks rendered: " << m_blocksRendered << " / " << m_totalBlocks << std::endl;
 
         imageUpdated(imageBlock, xOffset, yOffset);
     }
