@@ -21,9 +21,7 @@ namespace vesp
         if (!scene->rayIntersect(ray, its))
             return Spectrum(1.f);
 
-        Vector3f randomDir = Warp::squareToUniformHemisphere(sampler.next2D());
-        Vector3f worldDir = its.toWorld(randomDir);
-
+        Vector3f worldDir = its.toWorld(Warp::squareToUniformHemisphere(sampler.next2D()));
         Ray3f occlusionRay(its.p, worldDir, RayEpsilon, m_length);
 
         if (scene->rayIntersect(occlusionRay))
