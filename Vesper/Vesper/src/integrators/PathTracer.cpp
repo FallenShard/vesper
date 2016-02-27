@@ -34,8 +34,7 @@ namespace vesp
             }
 
             BSDFSample bsdfSample(its.p, its.toLocal(-ray.d));
-            Spectrum bsdf = its.shape->getBSDF()->sample(bsdfSample, sampler);
-            throughput *= bsdf;
+            throughput *= its.shape->getBSDF()->sample(bsdfSample, sampler);
 
             ray.o = its.p;
             ray.d = its.toWorld(bsdfSample.wo);
