@@ -1,5 +1,4 @@
 #include <iostream>
-//#include <Windows.h>
 #include <core/Application.hpp>
 
 namespace
@@ -40,7 +39,7 @@ namespace vesp
         glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
         // Create the main window
-        m_mainWindow = glfwCreateWindow(500, 500, "Vesper", nullptr, nullptr);
+        m_mainWindow = glfwCreateWindow(DefaultWidth, DefaultHeight, "Vesper", nullptr, nullptr);
         if (!m_mainWindow)
         {
             glfwTerminate();
@@ -92,17 +91,15 @@ namespace vesp
     {
         glClearColor(0.0f, 0.3f, 0.0f, 1.0f);
 
-        m_rayTracer->initializeScene("res/example.xml");
-        m_rayTracer->startRayTracing();
-
         while (!glfwWindowShouldClose(m_mainWindow))
         {
+            // Wait for events, saves processing power
             glfwWaitEvents();
 
-            //m_tsp->render();
-
+            // Render the content to the back buffer
             m_renderer->render();
 
+            // Swap the back and front buffers
             glfwSwapBuffers(m_mainWindow);
         }
     }
@@ -111,14 +108,15 @@ namespace vesp
     {
         std::cout << "Key " << key << " action: " << action << " mode: " << mode << std::endl;
 
-        /*if (key == GLFW_KEY_T && action == GLFW_RELEASE)
-        {
-        for (int i = 0; i < 500; i++)
-        m_tsp->simulate(0);
-        }*/
-
         if (key == GLFW_KEY_S)
+        {
             m_rayTracer->stopRayTracing();
+        }
+        else if (key == GLFW_KEY_E)
+        {
+            m_rayTracer->initializeScene("res/example.xml");
+            m_rayTracer->startRayTracing();
+        }
     }
 
     void Application::onSceneInitialized(int width, int height)
