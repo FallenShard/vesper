@@ -47,9 +47,7 @@ namespace vesp
         {
             RayTracingUpdate result;
             if (m_updateQueue.try_pop(result))
-            {
-                m_texQuad->updateHdriTexture(result.data.data(), result.x, result.y, result.w, result.h);
-            }
+                m_texQuad->updateTexture(result.data.data(), result.x, result.y, result.w, result.h);
         }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -146,10 +144,12 @@ namespace vesp
         m_texQuad->setTextureSize(newWidth, newHeight);
     }
 
-    void Renderer::onImageUpdated(ImageBlock& imageBlock, int xOffset, int yOffset)
+    void Renderer::onImageUpdated(ImageBlock& imageBlock)
     {
         int width = imageBlock.getSize().x();
         int height = imageBlock.getSize().y();
+        int xOffset = imageBlock.getOffset().x();
+        int yOffset = imageBlock.getOffset().y();
 
         m_updateQueue.push(RayTracingUpdate{ imageBlock.getRaw(), width, height, xOffset, yOffset });
 

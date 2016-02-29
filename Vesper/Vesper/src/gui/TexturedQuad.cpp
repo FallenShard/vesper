@@ -84,29 +84,22 @@ namespace vesp
         glUniform1i(texUnif, 1);
     }
 
-    void TexturedQuad::setTexture(const unsigned char* data, int width, int height)
-    {
-        glActiveTexture(GL_TEXTURE0 + 1);
-        glBindTexture(GL_TEXTURE_2D, m_texId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    }
-
     void TexturedQuad::setTextureSize(int width, int height)
     {
         std::vector<GLfloat> emptyData(width * height * 3, 0);
         glActiveTexture(GL_TEXTURE0 + 1);
         glBindTexture(GL_TEXTURE_2D, m_texId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, emptyData.data());
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, emptyData.data());
     }
 
-    void TexturedQuad::setHdriTexture(const float* data, int width, int height)
+    void TexturedQuad::setTexture(const float* data, int width, int height)
     {
         glActiveTexture(GL_TEXTURE0 + 1);
         glBindTexture(GL_TEXTURE_2D, m_texId);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, data);
     }
 
-    void TexturedQuad::updateHdriTexture(const float* data, int xOffset, int yOffset, int width, int height)
+    void TexturedQuad::updateTexture(const float* data, int xOffset, int yOffset, int width, int height)
     {
         glActiveTexture(GL_TEXTURE0 + 1);
         glBindTexture(GL_TEXTURE_2D, m_texId);

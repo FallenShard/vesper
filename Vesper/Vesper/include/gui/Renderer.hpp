@@ -31,7 +31,7 @@ namespace vesp
         void setImageSize(int newWidth, int newHeight);
 
         void onKeyPressed(int key, int action, int mode);
-        void onImageUpdated(ImageBlock& imageBlock, int xOffset, int yOffset);
+        void onImageUpdated(ImageBlock& imageBlock);
 
     private:
         GLFWwindow* m_window;
