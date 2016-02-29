@@ -23,16 +23,16 @@ namespace vesp
 
     struct BSDFSample
     {
-        Point3f p;   // Point where bsdf is evaluated
-        Vector3f wi; // Incident direction in the local frame (where the ray should go)
-        Vector3f wo; // Outgoing direction in the local frame (where the ray came from)
+        Point3f p;   // In(eval, sample) - Point where bsdf is evaluated
+        Vector3f wi; // In(eval, sample) - Incident direction in the local frame (where the ray came from)
+        Vector3f wo; // In(eval), Out(sample) - Outgoing direction in the local frame (where the ray is going)
 
-        float eta;   // Index of refraction
+        float eta;   // In(eval), Out(sample) - Index of refraction
 
-        Measure measure; // Measure type for the interaction event
-
-        unsigned int interactionType; // Evaluated interaction event type
-        unsigned int requestedType;   // Requested type before sampling
+        Measure measure;              // In(eval), Out(sample) - Measure type for the interaction event
+        unsigned int requestedType;   // In(eval), Out(sample) - Requested type before sampling
+        unsigned int interactionType; // In(eval), Out(sample) - Evaluated interaction event type
+        
 
         BSDFSample() {}
         BSDFSample(const Point3f& p, const Vector3f& localWi) : p(p), wi(localWi) {}
