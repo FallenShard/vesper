@@ -1,4 +1,5 @@
 #include <sensors/Perspective.hpp>
+#include <reconstruction/GaussianFilter.hpp>
 #include <iostream>
 
 namespace vesp
@@ -33,6 +34,12 @@ namespace vesp
         Transform shift = Transform::createTranslation(Vector3f(1.f, 1.f / aspect, 0.f));
 
         m_sampleToCamera = (scale * shift * perspective).invert();
+
+        if (!m_filter)
+        {
+            m_filter = std::make_shared<GaussianFilter>(AttributeList());
+            m_filter->configure();
+        }
     }
 
     Spectrum PerspectiveSensor::sampleRay(Ray3f& ray, const Point2f& samplePosition, const Point2f& apertureSample) const
