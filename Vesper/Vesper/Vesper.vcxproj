@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\acceleration\EmbreeWrapper.cpp" />
+    <ClCompile Include="src\bsdfs\Dielectric.cpp" />
     <ClCompile Include="src\bsdfs\Lambertian.cpp" />
     <ClCompile Include="src\emitters\AreaLight.cpp" />
     <ClCompile Include="src\emitters\PointLight.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="include\acceleration\EmbreeWrapper.hpp" />
     <ClInclude Include="include\acceleration\GeometryVisitor.hpp" />
     <ClInclude Include="include\bsdfs\BSDF.hpp" />
+    <ClInclude Include="include\bsdfs\Dielectric.hpp" />
     <ClInclude Include="include\bsdfs\Lambertian.hpp" />
     <ClInclude Include="include\core\VesperException.hpp" />
     <ClInclude Include="include\core\VesperObjectFactory.hpp" />

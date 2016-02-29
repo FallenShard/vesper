@@ -123,6 +123,9 @@
     <ClCompile Include="src\core\ImageBlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\bsdfs\Dielectric.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\Application.hpp">
@@ -297,6 +300,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\optics\Optics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bsdfs\Dielectric.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
