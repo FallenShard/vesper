@@ -4,7 +4,6 @@
 #include <stb/stb_image.h>
 
 #include <core/Utils.hpp>
-#include <core/ImageBlock.hpp>
 
 #include <gui/Renderer.hpp>
 #include <gui/TexturedQuad.hpp>
