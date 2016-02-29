@@ -13,6 +13,7 @@
 #include <shapes/WavefrontObjMesh.hpp>
 
 #include <bsdfs/Lambertian.hpp>
+#include <bsdfs/Dielectric.hpp>
 
 #include <emitters/PointLight.hpp>
 #include <emitters/AreaLight.hpp>
@@ -40,11 +41,13 @@ namespace vesp
             registerClass<WavefrontObjMesh>("objMesh");
 
             registerClass<LambertianBSDF>("lambertian");
+            registerClass<DielectricBSDF>("dielectric");
 
             registerClass<PointLight>("point");
             registerClass<AreaLight>("area");
 
             initialized = true;
+            std::cout << "Object factory initialized!" << std::endl;
         }
     }
 
