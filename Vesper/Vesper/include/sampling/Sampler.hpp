@@ -13,6 +13,7 @@ namespace vesp
 
         virtual std::unique_ptr<Sampler> clone() const = 0;
 
+        virtual void prepare() = 0;
         virtual void generate() = 0;
         virtual void advance() = 0;
         

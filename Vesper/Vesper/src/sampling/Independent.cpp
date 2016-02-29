@@ -1,3 +1,4 @@
+
 #include <sampling/Independent.hpp>
 
 namespace vesp
@@ -28,6 +29,11 @@ namespace vesp
         other->m_sampleCount = m_sampleCount;
 
         return std::move(other);
+    }
+
+    void IndependentSampler::prepare()
+    {
+        m_randomEngine.seed(std::random_device()());
     }
 
     void IndependentSampler::generate()
