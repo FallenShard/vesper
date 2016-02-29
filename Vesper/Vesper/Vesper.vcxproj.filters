@@ -30,9 +30,6 @@
     <ClCompile Include="src\core\Bitmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\ImageBlock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\RayTracer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -117,6 +114,15 @@
     <ClCompile Include="src\integrators\Normals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\reconstruction\GaussianFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reconstruction\ReconstructionFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\ImageBlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\Application.hpp">
@@ -135,9 +141,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\core\Utils.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\core\ImageBlock.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\spectrum\Spectrum.hpp">
@@ -282,6 +285,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\integrators\Normals.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\spectrum\WeightedSpectrum.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\reconstruction\GaussianFilter.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\ImageBlock.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\optics\Optics.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -141,6 +141,8 @@
     <ClCompile Include="src\integrators\AmbientOcclusion.cpp" />
     <ClCompile Include="src\integrators\Normals.cpp" />
     <ClCompile Include="src\integrators\PathTracer.cpp" />
+    <ClCompile Include="src\reconstruction\GaussianFilter.cpp" />
+    <ClCompile Include="src\reconstruction\ReconstructionFilter.cpp" />
     <ClCompile Include="src\sampling\DiscretePdf.cpp" />
     <ClCompile Include="src\sampling\Warp.cpp" />
     <ClCompile Include="src\sensors\Sensor.cpp" />
@@ -182,6 +184,8 @@
     <ClInclude Include="include\integrators\AmbientOcclusion.hpp" />
     <ClInclude Include="include\integrators\Normals.hpp" />
     <ClInclude Include="include\integrators\PathTracer.hpp" />
+    <ClInclude Include="include\optics\Optics.hpp" />
+    <ClInclude Include="include\reconstruction\GaussianFilter.hpp" />
     <ClInclude Include="include\reconstruction\ReconstructionFilter.hpp" />
     <ClInclude Include="include\sampling\DiscretePdf.hpp" />
     <ClInclude Include="include\sampling\Warp.hpp" />
@@ -225,6 +229,7 @@
     <ClInclude Include="include\spectrum\RgbSpectrum.hpp" />
     <ClInclude Include="include\spectrum\SampledSpectrum.hpp" />
     <ClInclude Include="include\spectrum\Spectrum.hpp" />
+    <ClInclude Include="include\spectrum\WeightedSpectrum.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\color_frag.glsl" />
