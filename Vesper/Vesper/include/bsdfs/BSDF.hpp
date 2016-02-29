@@ -35,8 +35,8 @@ namespace vesp
         unsigned int requestedType;   // Requested type before sampling
 
         BSDFSample() {}
-        BSDFSample(const Point3f& p, const Vector3f& wi) : p(p), wi(wi) {}
-        BSDFSample(const Point3f& p, const Vector3f& wi, const Vector3f& wo) : p(p), wi(wi), wo(wo) {}
+        BSDFSample(const Point3f& p, const Vector3f& localWi) : p(p), wi(localWi) {}
+        BSDFSample(const Point3f& p, const Vector3f& localWi, const Vector3f& localWo) : p(p), wi(localWi), wo(localWo) {}
     };
 
     class BSDF : public VesperObject

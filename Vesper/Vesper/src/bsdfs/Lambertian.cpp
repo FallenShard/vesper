@@ -43,7 +43,7 @@ namespace vesp
             Frame::cosTheta(bsdfSample.wo) <= 0.f)
             return 0.f;
 
-        return InvPI  * Frame::cosTheta(bsdfSample.wo);
+        return InvPI * Frame::cosTheta(bsdfSample.wo);
     }
 
     unsigned int LambertianBSDF::getType() const
