@@ -88,18 +88,21 @@ namespace vesp
     
     float Scene::getEmitterPdf() const
     {
-        return static_cast<float>(m_emitters.size());
+        return 1.f / static_cast<float>(m_emitters.size());
     }
 
     Spectrum Scene::sampleEmitter(const Intersection& its, Sampler& sampler, EmitterSample& emitterSample) const
     {
         const Emitter* emitter = getRandomEmitter(sampler.next1D());
+        if (!emitter)
+            return Spectrum(0.f);
+        
         Spectrum lightContrib = emitter->sample(emitterSample, sampler);
 
         if (emitterSample.pdf != 0)
         {
-            lightContrib *= getEmitterPdf();
-            emitterSample.pdf *= 1.f / getEmitterPdf();
+            lightContrib *= 1.f / getEmitterPdf();
+            emitterSample.pdf *= getEmitterPdf();
             return lightContrib;
         }
 

@@ -24,28 +24,21 @@ namespace vesp
         void initializeScene(const std::string& filename);
         void startRayTracing();
 
-        void updateImage(ImageBlock& imageBlock, int xOffset, int yOffset);
+        void updateImage(ImageBlock& imageBlock);
 
         void stopRayTracing();
 
         EventSource<void, int, int> sceneInitialized;
-        EventSource<void, ImageBlock&, int, int> imageUpdated;
+        EventSource<void, ImageBlock&> imageUpdated;
 
     private:
-        struct ImageBlockDescriptor
-        {
-            int x, y, w, h;
-            ImageBlockDescriptor(int xx, int yy, int ww, int hh) : x(xx), y(yy), w(ww), h(hh) {}
-            ImageBlockDescriptor() : x(0), y(0) {}
-        };
-
         void generateImageBlocks(int width, int height);
-        void renderBlock(ImageBlock& block, ImageBlockDescriptor& blockDesc, Sampler& sampler, const Scene* scene);
+        void renderBlock(ImageBlock& block, Sampler& sampler, const Scene* scene);
 
         std::shared_ptr<Scene> m_scene;
         ImageBlock m_image;
 
-        tbb::concurrent_queue<ImageBlockDescriptor> m_blockQueue;
+        tbb::concurrent_queue<ImageBlock::Descriptor> m_blockQueue;
 
         enum class RenderStatus
         {

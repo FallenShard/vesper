@@ -23,14 +23,13 @@ namespace
 {
     const int DefaultImageWidth = 800;
     const int DefaultImageHeight = 600;
-    const int BlockSize = 50;
+    const int BlockSize = 32;
 }
 
 namespace vesp
 {
     RayTracer::RayTracer()
-        : m_image(Vector2i(DefaultImageWidth, DefaultImageHeight))
-        , m_renderStatus(RenderStatus::Free)
+        : m_renderStatus(RenderStatus::Free)
         , m_progress(1.f)
         , m_scene(nullptr)
     {
@@ -39,6 +38,7 @@ namespace vesp
         _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 
         VesperObjectFactory::initialize();
+        m_image.initialize(Vector2i(DefaultImageWidth, DefaultImageHeight), nullptr);
     }
 
     RayTracer::~RayTracer()
@@ -59,7 +59,7 @@ namespace vesp
             auto imageSize = m_scene->getSensor()->getImageSize();
             sceneInitialized(imageSize.x(), imageSize.y());
 
-            m_image.initialize(imageSize);
+            m_image.initialize(imageSize, m_scene->getSensor()->getReconstructionFilter());
             m_image.clear();
         }
         catch (VesperException ex)
@@ -105,17 +105,17 @@ namespace vesp
                     if (m_renderStatus == RenderStatus::Interrupted)
                         break;
 
-                    RayTracer::ImageBlockDescriptor currIbd;
+                    ImageBlock::Descriptor desc;
 
-                    if (m_blockQueue.try_pop(currIbd))
+                    if (m_blockQueue.try_pop(desc))
                     {
-                        ImageBlock currentBlock(Vector2i(currIbd.w, currIbd.h));
+                        ImageBlock currentBlock(desc.offset, desc.size, m_scene->getSensor()->getReconstructionFilter());
 
-                        int blockId = (currIbd.y / BlockSize) * numCols + currIbd.x / BlockSize;
+                        int blockId = (desc.offset.y() / BlockSize) * numCols + desc.offset.x() / BlockSize;
 
-                        renderBlock(currentBlock, currIbd, *samplers.at(blockId).get(), m_scene.get());
+                        renderBlock(currentBlock, *samplers.at(blockId), m_scene.get());
 
-                        updateImage(currentBlock, currIbd.x, currIbd.y);
+                        updateImage(currentBlock);
                     }
                 }
             };
@@ -142,7 +142,10 @@ namespace vesp
     void RayTracer::generateImageBlocks(int width, int height)
     {
         m_blockQueue.clear();
+        int numRows = (height - 1) / BlockSize + 1;
+        int numCols = (width - 1) / BlockSize + 1;
 
+        std::vector<ImageBlock::Descriptor> descriptors;
         int currRow = 0;
         int currCol = 0;
         while (currRow < height)
@@ -150,13 +153,18 @@ namespace vesp
             int currHeight = BlockSize;
             if (currRow + BlockSize > height) currHeight = height - currRow;
 
+            int currBlockRow = (currHeight - 1) / BlockSize;
+
             currCol = 0;
             while (currCol < width)
             {
                 int currWidth = BlockSize;
                 if (currCol + BlockSize > width) currWidth = width - currCol;
 
-                m_blockQueue.push(ImageBlockDescriptor(currCol, currRow, currWidth, currHeight));
+                int currBlockCol = (currWidth - 1) / BlockSize;
+
+                ImageBlock::Descriptor desc(currCol, currRow, currWidth, currHeight);
+                descriptors.push_back(desc);
 
                 currCol += BlockSize;
             }
@@ -164,47 +172,90 @@ namespace vesp
             currRow += BlockSize;
         }
 
+        std::vector<std::vector<unsigned int>> indexMat(numRows, std::vector<unsigned>(numCols));
+        for (int i = 0; i < numRows; ++i)
+            for (int j = 0; j < numCols; ++j)
+                indexMat[i][j] = i * numCols + j;
+
+        std::vector<unsigned int> indices;
+
+        int i;
+        int k = 0;
+        int l = 0;
+        int m = numRows;
+        int n = numCols;
+
+        while (k < m && l < n)
+        {
+            for (i = l; i < n; ++i)
+                indices.push_back(indexMat[k][i]);
+            k++;
+            for (i = k; i < m; ++i)
+                indices.push_back(indexMat[i][n - 1]);
+            n--;
+
+            if (k < m)
+            {
+                for (i = n - 1; i >= l; --i)
+                    indices.push_back(indexMat[m - 1][i]);
+                m--;
+            }
+
+            if (l < n)
+            {
+                for (i = m - 1; i >= k; --i)
+                    indices.push_back(indexMat[i][l]);
+                l++;
+            }
+        }
+
+        for (auto i = 0; i < indices.size() / 2; ++i)
+            std::swap(indices[i], indices[indices.size() - 1 - i]);
+
+        for (auto idx : indices)
+            m_blockQueue.push(descriptors[idx]);
+
         m_blocksRendered = 0;
         m_totalBlocks = static_cast<int>(m_blockQueue.unsafe_size());
     }
 
-    void RayTracer::renderBlock(ImageBlock& block, RayTracer::ImageBlockDescriptor& blockDesc, Sampler& sampler, const Scene* scene)
+    void RayTracer::renderBlock(ImageBlock& block, Sampler& sampler, const Scene* scene)
     {
         block.clear();
+        Point2i offset = block.getOffset();
 
         const Sensor* sensor = scene->getSensor();
         const Integrator* integrator = scene->getIntegrator();
         size_t numSamples = sampler.getSampleCount();
+        sampler.prepare();
 
-        for (int y = 0; y < block.getSize().y(); ++y)
+        for (int y = 0; y < block.getFullSize().y(); ++y)
         {
-            for (int x = 0; x < block.getSize().x(); ++x)
+            for (int x = 0; x < block.getFullSize().x(); ++x)
             {
                 float weightSum = 0.f;
                 for (int s = 0; s < numSamples; s++)
                 {
-                    Point2f pixelSample(x + blockDesc.x + sampler.next1D(), y + blockDesc.y + sampler.next1D());
+                    Point2f pixelSample(x + offset.x() + sampler.next1D(), y + offset.y() + sampler.next1D());
                     Point2f apertureSample = sampler.next2D();
 
                     Ray3f ray;
                     Spectrum response = sensor->sampleRay(ray, pixelSample, apertureSample);
-
-                    block(y, x) += response * integrator->Li(scene, sampler, ray);
+                    Spectrum radiance = integrator->Li(scene, sampler, ray);
+                    block.addSample(pixelSample, response * radiance);
                 }
-
-                block(y, x) /= static_cast<float>(numSamples);
             }
         }
     }
 
-    void RayTracer::updateImage(ImageBlock& imageBlock, int xOffset, int yOffset)
+    void RayTracer::updateImage(ImageBlock& imageBlock)
     {
         std::lock_guard<std::mutex> lock(m_imageMutex);
 
         m_blocksRendered++;
         std::cout << "Blocks rendered: " << m_blocksRendered << " / " << m_totalBlocks << std::endl;
 
-        imageUpdated(imageBlock, xOffset, yOffset);
+        imageUpdated(imageBlock);
     }
 
     void RayTracer::stopRayTracing()
