@@ -1,4 +1,5 @@
 #include <integrators/PathTracer.hpp>
+#include <sampling/Sampler.hpp>
 
 namespace vesp
 {
@@ -39,6 +40,14 @@ namespace vesp
             ray.o = its.p;
             ray.d = its.toWorld(bsdfSample.wo);
             ray.update();
+
+            float q = 1.f - std::min(throughput.maxCoeff(), 0.99f);
+            if (sampler.next1D() > q)
+                throughput /= 1.f - q;
+            else
+                break;
         }
+
+        return L;
     }
 }
