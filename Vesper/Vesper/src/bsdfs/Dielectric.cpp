@@ -1,5 +1,5 @@
 #include <bsdfs/Dielectric.hpp>
-#include <optics/Optics.hpp>
+#include <optics/Fresnel.hpp>
 #include <math/Frame.hpp>
 #include <sampling/Sampler.hpp>
 
