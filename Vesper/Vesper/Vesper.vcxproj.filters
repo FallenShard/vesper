@@ -126,6 +126,12 @@
     <ClCompile Include="src\bsdfs\Dielectric.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\bsdfs\Mirror.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\integrators\MisPathTracer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\Application.hpp">
@@ -299,10 +305,16 @@
     <ClInclude Include="include\core\ImageBlock.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\optics\Optics.hpp">
+    <ClInclude Include="include\bsdfs\Dielectric.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\bsdfs\Dielectric.hpp">
+    <ClInclude Include="include\optics\Fresnel.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bsdfs\Mirror.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\integrators\MisPathTracer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
