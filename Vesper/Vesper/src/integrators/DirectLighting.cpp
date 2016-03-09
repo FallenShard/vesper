@@ -33,6 +33,7 @@ namespace vesp
 
         return L;
     }
+
     Spectrum DirectLightingIntegrator::emitterImportanceSample(const Scene* scene, Sampler& sampler, const Ray3f& ray, const Intersection& its) const
     {
         Spectrum Li(0.f);
@@ -53,6 +54,7 @@ namespace vesp
         float pdfBsdf = its.shape->getBSDF()->pdf(bsdfSam);
         return pdfEm * Li / (pdfEm + pdfBsdf);
     }
+
     Spectrum DirectLightingIntegrator::bsdfImportanceSample(const Scene* scene, Sampler& sampler, const Ray3f& ray, const Intersection& its) const
     {
         Spectrum Li(0.f);
