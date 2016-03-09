@@ -30,7 +30,7 @@ namespace vesp
         float eta;   // In(eval), Out(sample) - Index of refraction
 
         Measure measure;              // In(eval), Out(sample) - Measure type for the interaction event
-        unsigned int requestedType;   // In(eval), Out(sample) - Requested type before sampling
+        unsigned int requestedType;   // In(eval, sample) - Requested type before sampling (optional)
         unsigned int interactionType; // In(eval), Out(sample) - Evaluated interaction event type
         
 
