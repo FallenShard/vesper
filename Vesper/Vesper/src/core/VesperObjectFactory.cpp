@@ -6,6 +6,7 @@
 #include <integrators/DirectLighting.hpp>
 #include <integrators/AmbientOcclusion.hpp>
 #include <integrators/PathTracer.hpp>
+#include <integrators/MisPathTracer.hpp>
 #include <integrators/Normals.hpp>
 
 #include <sensors/Perspective.hpp>
@@ -14,6 +15,7 @@
 
 #include <bsdfs/Lambertian.hpp>
 #include <bsdfs/Dielectric.hpp>
+#include <bsdfs/Mirror.hpp>
 
 #include <emitters/PointLight.hpp>
 #include <emitters/AreaLight.hpp>
@@ -34,6 +36,7 @@ namespace vesp
             registerClass<DirectLightingIntegrator>("direct-lighting");
             registerClass<AmbientOcclusionIntegrator>("ambient-occlusion");
             registerClass<PathTracer>("path-tracer");
+            registerClass<MisPathTracer>("mis-path-tracer");
             registerClass<NormalsIntegrator>("normals");
 
             registerClass<PerspectiveSensor>("perspective");
@@ -42,6 +45,7 @@ namespace vesp
 
             registerClass<LambertianBSDF>("lambertian");
             registerClass<DielectricBSDF>("dielectric");
+            registerClass<MirrorBSDF>("mirror");
 
             registerClass<PointLight>("point");
             registerClass<AreaLight>("area");
